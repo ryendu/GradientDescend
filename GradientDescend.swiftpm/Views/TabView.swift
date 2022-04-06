@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import IrregularGradient
 import Neumorphic
+import CoreMotion
+
 
 enum MainView {
     case learnView
@@ -23,16 +25,6 @@ struct TabView: View {
     @State var selectedView: MainView = .learnView
     @State var geo: GeometryProxy?
     
-    @State var learnOffset = CGSize.zero
-    @State var gameOffset = CGSize.zero
-    @State var aboutOffset = CGSize.zero
-    
-    @State var learnFrame = CGSize.zero
-    @State var gameFrame = CGSize.zero
-    @State var aboutFrame = CGSize.zero
-    
-    @State var dragCurrentTranslation = CGSize.zero
-    
     var body: some View {
         
         
@@ -44,40 +36,34 @@ struct TabView: View {
                     .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
                     .scaledToFill()
                     .ignoresSafeArea()
-                    .gesture(
-                        DragGesture()
-                            .onChanged { ges in
-                                self.dragCurrentTranslation = ges.translation
-                            }
-                            .onEnded { ges in
-                                
-                            }
-                    )
-                
                 
                 GameView()
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .gameView, geo: $geo, dragCurrentTranslation: self.$dragCurrentTranslation)
+                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .gameView, geo: $geo)
+                    .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 AboutView()
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo, dragCurrentTranslation: self.$dragCurrentTranslation)
-
+                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
+                    .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 LearnView()
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learnView, geo: $geo, dragCurrentTranslation: self.$dragCurrentTranslation)
-         
-                VStack {
-                    //views do like a circle carousel
-                    
-                    //switcher
-                    Spacer()
-                    HStack {
-                        Text("heres a switcher lol")
-                    }
-                }
-            }.onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    self.zoomOut()
-                })
+                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learnView, geo: $geo)
+                    .gyroscope3DEffect(zoomedOut: $zoomedOut)
+                ZStack(alignment: .bottomTrailing) {
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            self.zoomedOut.toggle()
+                        }
+                    }, label: {
+                        
+                        Image(systemName: "square.3.stack.3d")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
+                            .padding()
+                            .background(Circle().foregroundColor(.white).softInnerShadow(Circle()))
+                    })
+                }.zIndex(2).offset(x: (self.geo?.size.width ?? 500) / 2 - 50, y: (self.geo?.size.width ?? 500) / 1.4 / 2 - 50)
             }
+        
             .background(GeometryReader { geo in
                 Text("")
                     .onAppear(perform: {
@@ -85,16 +71,6 @@ struct TabView: View {
                     })
             })
         
-        
-    }
-    func zoomIn() {
-        self.zoomedOut = false
-    }
-    
-    func zoomOut() {
-        withAnimation(.spring()) {
-            self.zoomedOut = true
-        }
         
     }
 }
@@ -107,133 +83,36 @@ struct DisplayContainerHelper: ViewModifier{
     @Binding var zoomedOut: Bool
     var viewType: MainView
     @Binding var geo: GeometryProxy?
-    @Binding var dragCurrentTranslation: CGSize
-    // next position pos and next position neg are just the next default preset positions that the view will slide to on its right(pos) or left(neg) side
-    @State var nextPositionPos = CGSize.zero
-    @State var nextPositionNeg = CGSize.zero
-    @State var currentDefaultOffset = CGSize.zero
     
     func body(content: Content) -> some View {
         ZStack (alignment:.center) {
             Color.white
             content
-                .if(self.selectedView == viewType) { $0.zIndex(1) }
+                
         }
-        
+        .zIndex(self.selectedView == self.viewType ? 1 : 0)
         .frame(width: self.viewSize().width, height: self.viewSize().height)
         
         .cornerRadius(zoomedOut ? 18 : 0)
         .padding(11)
-        .background(zoomedOut ? Color("deviceFrame") : Color.white.opacity(0))
-        .softOuterShadow()
+        .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).softOuterShadow() : Rectangle().foregroundColor(.white).opacity(0).softOuterShadow() )
+        
         .cornerRadius(zoomedOut ? 24 : 0)
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .gameView ? .learnView : .gameView))) ? -490 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learnView : .aboutView))) ? 490 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .gameView ? .learnView : .gameView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 65 )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learnView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 65  )
         
-        //now for the drag offsets
-        .offset(x: self.zoomedOut ? getCurrentDragOffset().width : 0, y: self.zoomedOut ? getCurrentDragOffset().height : 0)
-        .rotation3DEffect(Angle(degrees: 10), axis: (x: 0, y: 0, z: 0))
-        .frame(width: getCurrentFrame().width, height: getCurrentFrame().height)
-        // max scale from small to large is 1.7 and large to small is 0.58
-        .onAppear {
-            // get current default offset
-            if self.selectedView == viewType {
-                self.currentDefaultOffset = CGSize(width: 0,height: 0)
-            } else if (viewType == (self.selectedView == .gameView ? .learnView : .gameView)) {
-                self.currentDefaultOffset = CGSize(width: -490,height: -65)
-            } else {
-                self.currentDefaultOffset = CGSize(width: 490,height: -65)
+        .onTapGesture {
+            if self.zoomedOut {
+            withAnimation(.spring()) {
+                self.selectedView = self.viewType
+                self.zoomedOut.toggle()
             }
-            
-            // get next position
-            if self.currentDefaultOffset == CGSize(width: 0,height: 0) {
-                
-                self.nextPositionPos = CGSize(width: 490,height: -65)
-                self.nextPositionNeg = CGSize(width: -490,height: -65)
-                
-            } else if self.currentDefaultOffset == CGSize(width: -490,height: -65) {
-                self.nextPositionPos = CGSize(width: 0,height: 0)
-                self.nextPositionNeg = CGSize(width: 490,height: -65)
-            } else {
-                self.nextPositionPos = CGSize(width: -490,height: -65)
-                self.nextPositionNeg = CGSize(width: 0,height: 0)
             }
         }
-    }
-    
-    func percentThrough() -> CGFloat{
-        if abs(self.dragCurrentTranslation.width) > 500 {
-            return CGFloat(1)
-        } else {
-            return abs(self.dragCurrentTranslation.width / 500)
-        }
-    }
-    
-    func getCurrentFrame () -> CGSize {
-        
-        var x = 0.0
-        var y = 0.0
-        if self.dragCurrentTranslation.width >= 0 {
-            if abs(nextPositionPos.width) == 490 && abs(currentDefaultOffset.width) != 490 {
-                //shrink
-                x = 640 - 160 * percentThrough()
-                y = 436 - 109 * percentThrough()
-            } else if abs(nextPositionPos.width) == 0 && abs(currentDefaultOffset.width) != 0 {
-                //enlarge
-                x = 480 + 160 * percentThrough()
-                y = 327 + 109 * percentThrough()
-            } else if abs(nextPositionPos.width) == 490 && abs(currentDefaultOffset.width) == 490 {
-                //stay small
-                x = 480
-                y = 327
-            } else if abs(nextPositionPos.width) == 0 && abs(currentDefaultOffset.width) == 0 {
-                //stay big
-                x = 640
-                y = 436
-            }
-        } else if self.dragCurrentTranslation.width < 0 {
-            if abs(nextPositionNeg.width) == 490 && abs(currentDefaultOffset.width) != 490 {
-                //shrink
-                x = 640 - 160 * percentThrough()
-                y = 436 - 109 * percentThrough()
-            } else if abs(nextPositionNeg.width) == 0 && abs(currentDefaultOffset.width) != 0 {
-                //enlarge
-                x = 480 + 160 * percentThrough()
-                y = 327 + 109 * percentThrough()
-            } else if abs(nextPositionNeg.width) == 490 && abs(currentDefaultOffset.width) == 490 {
-                //stay small
-                x = 480
-                y = 327
-            } else if abs(nextPositionNeg.width) == 0 && abs(currentDefaultOffset.width) == 0 {
-                //stay big
-                x = 640
-                y = 436
-            }
-        }
-        
-        return CGSize(width: x, height: y)
-    }
-    
-    func getCurrentDragOffset () -> CGSize {
-        
-        var x = 0.0
-        var y = 0.0
-        if self.dragCurrentTranslation.width >= 0 {
-            x = (nextPositionPos.width  - currentDefaultOffset.width) * percentThrough()
-        } else if self.dragCurrentTranslation.width < 0 {
-            x = (nextPositionNeg.width  - currentDefaultOffset.width) * percentThrough()
-        }
-        
-        if self.dragCurrentTranslation.width >= 0 {
-            y = (nextPositionPos.height  - currentDefaultOffset.height) * percentThrough()
-        } else if self.dragCurrentTranslation.width < 0 {
-            y = (nextPositionNeg.height  - currentDefaultOffset.height) * percentThrough()
-        }
-        return CGSize(width: x, height: y)
     }
     
     func viewSize() -> CGSize {
-        let isMain = selectedView == viewType
+        let isMain = false
         if zoomedOut {
             return CGSize(width: isMain ? 640 : 480, height: isMain ? 436 : 327)
         } else {
@@ -242,10 +121,48 @@ struct DisplayContainerHelper: ViewModifier{
     }
 }
 
+class MotionManager: ObservableObject {
+    var motionManager: CMMotionManager
+    @Published var x = 0.4
+    @Published var y = 0.2
+    @Published var z = 0.1
+    
+    init() {
+        self.motionManager = CMMotionManager()
+        self.motionManager.magnetometerUpdateInterval = 1/30
+        self.motionManager.startDeviceMotionUpdates(to: .main) {data, error in
+            if let error = error {
+                print(error)
+            }
+            guard let data = data else { return }
+            self.objectWillChange.send()
+            self.x = data.rotationRate.x
+            self.y = data.rotationRate.y
+            self.z = data.rotationRate.z
+            
+        }
+    }
+}
+
+struct Gyroscope3DEffect: ViewModifier {
+    @ObservedObject var motionManager = MotionManager()
+    @Binding var zoomedOut: Bool
+    let magnitude = 2.0
+    func body(content: Content) -> some View {
+        
+        content
+            .rotation3DEffect(Angle(degrees: self.zoomedOut ? motionManager.y * magnitude : 0), axis: (x: 1, y: 0, z: 0))
+            .rotation3DEffect(Angle(degrees: self.zoomedOut ? motionManager.x * magnitude : 0), axis: (x: 0, y: 1, z: 0))
+            .rotation3DEffect(Angle(degrees: self.zoomedOut ? motionManager.z * magnitude : 0), axis: (x: 0, y: 0, z: 1))
+    }
+}
+
 extension View {
+    func displayContainerHelper(selectedView: Binding<MainView>, zoomedOut: Binding<Bool>,viewType: MainView, geo:Binding<GeometryProxy?>) -> some View{
+        return modifier(DisplayContainerHelper(selectedView: selectedView, zoomedOut: zoomedOut, viewType: viewType, geo:geo))
+    }
     
-    
-    func displayContainerHelper(selectedView: Binding<MainView>, zoomedOut: Binding<Bool>,viewType: MainView, geo:Binding<GeometryProxy?>, dragCurrentTranslation: Binding<CGSize>) -> some View{
-        return modifier(DisplayContainerHelper(selectedView: selectedView, zoomedOut: zoomedOut, viewType: viewType, geo:geo, dragCurrentTranslation: dragCurrentTranslation))
+    func gyroscope3DEffect(zoomedOut: Binding<Bool>) -> some View {
+        return modifier(Gyroscope3DEffect(zoomedOut: zoomedOut))
     }
 }
