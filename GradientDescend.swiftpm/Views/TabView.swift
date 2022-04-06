@@ -133,6 +133,7 @@ struct DisplayContainerHelper: ViewModifier{
         //now for the drag offsets
         .offset(x: self.zoomedOut ? getCurrentDragOffset().width : 0, y: self.zoomedOut ? getCurrentDragOffset().height : 0)
         .rotation3DEffect(Angle(degrees: 10), axis: (x: 0, y: 0, z: 0))
+        .frame(width: getCurrentFrame().width, height: getCurrentFrame().height)
         // max scale from small to large is 1.7 and large to small is 0.58
         .onAppear {
             // get current default offset
@@ -151,31 +152,83 @@ struct DisplayContainerHelper: ViewModifier{
                 self.nextPositionNeg = CGSize(width: -490,height: -65)
                 
             } else if self.currentDefaultOffset == CGSize(width: -490,height: -65) {
-                self.nextPositionPos = CGSize(width: 490,height: -65)
-                self.nextPositionNeg = CGSize(width: 0,height: 0)
-            } else {
                 self.nextPositionPos = CGSize(width: 0,height: 0)
                 self.nextPositionNeg = CGSize(width: 490,height: -65)
+            } else {
+                self.nextPositionPos = CGSize(width: -490,height: -65)
+                self.nextPositionNeg = CGSize(width: 0,height: 0)
             }
         }
     }
     
+    func percentThrough() -> CGFloat{
+        if abs(self.dragCurrentTranslation.width) > 500 {
+            return CGFloat(1)
+        } else {
+            return abs(self.dragCurrentTranslation.width / 500)
+        }
+    }
     
-    func getCurrentDragOffset () -> CGSize {
+    func getCurrentFrame () -> CGSize {
+        
         var x = 0.0
         var y = 0.0
-        if self.dragCurrentTranslation.width > 0 {
-            x = (nextPositionPos.width  - currentDefaultOffset.width) * (self.dragCurrentTranslation.width / (nextPositionPos.width - currentDefaultOffset.width))
+        if self.dragCurrentTranslation.width >= 0 {
+            if abs(nextPositionPos.width) == 490 && abs(currentDefaultOffset.width) != 490 {
+                //shrink
+                x = 640 - 160 * percentThrough()
+                y = 436 - 109 * percentThrough()
+            } else if abs(nextPositionPos.width) == 0 && abs(currentDefaultOffset.width) != 0 {
+                //enlarge
+                x = 480 + 160 * percentThrough()
+                y = 327 + 109 * percentThrough()
+            } else if abs(nextPositionPos.width) == 490 && abs(currentDefaultOffset.width) == 490 {
+                //stay small
+                x = 480
+                y = 327
+            } else if abs(nextPositionPos.width) == 0 && abs(currentDefaultOffset.width) == 0 {
+                //stay big
+                x = 640
+                y = 436
+            }
         } else if self.dragCurrentTranslation.width < 0 {
-            x = (nextPositionNeg.width  - currentDefaultOffset.width) * (self.dragCurrentTranslation.width / (nextPositionNeg.width - currentDefaultOffset.width))
+            if abs(nextPositionNeg.width) == 490 && abs(currentDefaultOffset.width) != 490 {
+                //shrink
+                x = 640 - 160 * percentThrough()
+                y = 436 - 109 * percentThrough()
+            } else if abs(nextPositionNeg.width) == 0 && abs(currentDefaultOffset.width) != 0 {
+                //enlarge
+                x = 480 + 160 * percentThrough()
+                y = 327 + 109 * percentThrough()
+            } else if abs(nextPositionNeg.width) == 490 && abs(currentDefaultOffset.width) == 490 {
+                //stay small
+                x = 480
+                y = 327
+            } else if abs(nextPositionNeg.width) == 0 && abs(currentDefaultOffset.width) == 0 {
+                //stay big
+                x = 640
+                y = 436
+            }
         }
         
-//        if self.currentDefaultOffset.height > 0 {
-//            y = (nextPositionPos.height  - currentDefaultOffset.height) * (self.dragCurrentTranslation.height / (nextPositionPos.height - currentDefaultOffset.height))
-//        } else if self.currentDefaultOffset.height < 0 {
-//            y = (nextPositionNeg.height  - currentDefaultOffset.height) * (self.dragCurrentTranslation.height / (nextPositionNeg.height - currentDefaultOffset.height))
-//        }
-
+        return CGSize(width: x, height: y)
+    }
+    
+    func getCurrentDragOffset () -> CGSize {
+        
+        var x = 0.0
+        var y = 0.0
+        if self.dragCurrentTranslation.width >= 0 {
+            x = (nextPositionPos.width  - currentDefaultOffset.width) * percentThrough()
+        } else if self.dragCurrentTranslation.width < 0 {
+            x = (nextPositionNeg.width  - currentDefaultOffset.width) * percentThrough()
+        }
+        
+        if self.dragCurrentTranslation.width >= 0 {
+            y = (nextPositionPos.height  - currentDefaultOffset.height) * percentThrough()
+        } else if self.dragCurrentTranslation.width < 0 {
+            y = (nextPositionNeg.height  - currentDefaultOffset.height) * percentThrough()
+        }
         return CGSize(width: x, height: y)
     }
     
