@@ -21,5 +21,6 @@ struct ContentView: View {
             self.skipOnboarding = UserDefaults.standard.bool(forKey: "skipOnboarding")
             UserDefaults.standard.set(true, forKey: "skipOnboarding")
         })
+        .preferredColorScheme(.light)
     }
 }

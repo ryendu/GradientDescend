@@ -32,28 +32,25 @@ struct TabView: View {
             ZStack (alignment: .center){
                 
                 //background
-                Rectangle()
-                    .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
-                    .scaledToFill()
-                    .ignoresSafeArea()
+                
                 
                 GameView()
                     .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .gameView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
-                
                 AboutView()
                     .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 LearnView()
                     .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learnView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
+                
                 ZStack(alignment: .bottomTrailing) {
                     Button(action: {
                         withAnimation(.spring()) {
                             self.zoomedOut.toggle()
                         }
                     }, label: {
-                        
+
                         Image(systemName: "square.3.stack.3d")
                             .resizable()
                             .frame(width: 20, height: 20)
@@ -61,17 +58,23 @@ struct TabView: View {
                             .padding()
                             .background(Circle().foregroundColor(.white).softInnerShadow(Circle()))
                     })
-                }.zIndex(2).offset(x: (self.geo?.size.width ?? 500) / 2 - 50, y: (self.geo?.size.width ?? 500) / 1.4 / 2 - 50)
-            }
-        
+                }.zIndex(2).offset(x: (self.geo?.size.width ?? 500) / 2 - 70, y: (self.geo?.size.width ?? 500) / 1.33 / 2 - 70)
+            }.ignoresSafeArea(edges: .top)
+            .background(
+                Rectangle()
+                    .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                    .zIndex(-1)
+                    .scaleEffect(3)
+            )
             .background(GeometryReader { geo in
                 Text("")
                     .onAppear(perform: {
                         self.geo = geo
+                        print(geo.size)
                     })
             })
-        
-        
     }
 }
 
@@ -90,16 +93,17 @@ struct DisplayContainerHelper: ViewModifier{
             content
                 
         }
+        .disabled(self.zoomedOut)
         .zIndex(self.selectedView == self.viewType ? 1 : 0)
-        .frame(width: self.viewSize().width, height: self.viewSize().height)
-        
+        .frame(width: self.zoomedOut ? self.viewSize().width : nil, height: self.zoomedOut ? self.viewSize().height : nil)
+
         .cornerRadius(zoomedOut ? 18 : 0)
-        .padding(11)
+        .padding(self.zoomedOut ? 11 : 0)
         .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).softOuterShadow() : Rectangle().foregroundColor(.white).opacity(0).softOuterShadow() )
-        
+
         .cornerRadius(zoomedOut ? 24 : 0)
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .gameView ? .learnView : .gameView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 65 )
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learnView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 65  )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .gameView ? .learnView : .gameView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learnView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
         
         .onTapGesture {
             if self.zoomedOut {
@@ -113,11 +117,7 @@ struct DisplayContainerHelper: ViewModifier{
     
     func viewSize() -> CGSize {
         let isMain = false
-        if zoomedOut {
-            return CGSize(width: isMain ? 640 : 480, height: isMain ? 436 : 327)
-        } else {
-            return self.geo?.size ?? CGSize(width: 500, height: 500)
-        }
+        return CGSize(width: isMain ? 640 : 480, height: isMain ? 436 : 327)
     }
 }
 
