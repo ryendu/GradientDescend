@@ -67,7 +67,7 @@ struct ControlsCard: View {
 //                    .softOuterShadow()
                     .padding()
             })
-        }.padding().padding(.bottom)
+        }.padding()
     }
 }
 

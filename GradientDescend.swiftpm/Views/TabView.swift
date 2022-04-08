@@ -40,7 +40,7 @@ struct TabView: View {
                 AboutView()
                     .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
-                LearnView()
+                LearnView(geo:$geo)
                     .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learnView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
