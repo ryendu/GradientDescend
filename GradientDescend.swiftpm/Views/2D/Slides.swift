@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import IrregularGradient
+import ConfettiSwiftUI
 
 struct CircleToLine: Shape {
     
@@ -54,15 +55,15 @@ struct TitleSlide: View {
             }
             Group {
                 if self.bubbles.count > 0 {
-                ForEach(self.bubbles, id:\.self) {bub in
-                    Circle()
-                        .fill(
-                            LinearGradient(colors: [bub.color1, bub.color2], startPoint: .top, endPoint: .bottomTrailing)
-                        )
-                        .frame(width: bub.x, height: bub.y)
-                        .offset(x:bub.offsetX, y:bub.offsetY)
-                        .transition(.scale)
-                }
+                    ForEach(self.bubbles, id:\.self) {bub in
+                        Circle()
+                            .fill(
+                                LinearGradient(colors: [bub.color1, bub.color2], startPoint: .top, endPoint: .bottomTrailing)
+                            )
+                            .frame(width: bub.x, height: bub.y)
+                            .offset(x:bub.offsetX, y:bub.offsetY)
+                            .transition(.scale)
+                    }
                 }
             }
             
@@ -80,7 +81,7 @@ struct TitleSlide: View {
         }
         .overlay(
             CircleToLine(becomeLine: self.reshrinkOverlay)
-                
+            
                 .fill(
                     LinearGradient(colors: [Color("bg3"),Color("bg4")], startPoint: .top, endPoint: .bottomTrailing)
                 )
@@ -89,7 +90,7 @@ struct TitleSlide: View {
                 .transition(.scale)
                 .animation(.spring(response: 0.8, dampingFraction: 0.6, blendDuration: 1), value: self.expandOverlay)
                 .offset(x: 0, y: self.reshrinkOverlay ? (geo?.size.height ?? 100) / -2 + 100  : 0)
-                
+            
         )
         .onTapGesture {
             withAnimation(.spring()) {
@@ -99,8 +100,8 @@ struct TitleSlide: View {
                     }
                 }
             }
-//            expand a big gradient and then cool off into white and next slide!
-
+            //            expand a big gradient and then cool off into white and next slide!
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                 self.expandOverlay = true
             }
@@ -115,7 +116,7 @@ struct TitleSlide: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 self.slide += 1
             }
-        
+            
         }
         .onAppear {
             
@@ -130,11 +131,11 @@ struct TitleSlide: View {
     }
     func addBubble() {
         withAnimation(.spring(
-                    response: 0.7,
-                    dampingFraction: 0.5,
-                    blendDuration: 0.9
-                )) {
-                    self.bubbles.append(Bubble(offsetX: randomOffset(), offsetY: randomOffset(), color1: randomRainbowColor(), color2: randomRainbowColor(),x:60*Double.random(in: 2...4),y:60*Double.random(in: 2...4)))
+            response: 0.7,
+            dampingFraction: 0.5,
+            blendDuration: 0.9
+        )) {
+            self.bubbles.append(Bubble(offsetX: randomOffset(), offsetY: randomOffset(), color1: randomRainbowColor(), color2: randomRainbowColor(),x:60*Double.random(in: 2...4),y:60*Double.random(in: 2...4)))
         }
     }
 }
@@ -199,13 +200,13 @@ struct WhatIsGradientDescentSlide: View {
                         Text("Gradient Descent").font(boldedTextFont) + Text(" uses training data to iteratively adjust the ").font(textFont) + Text("Weights and Biases").font(boldedTextFont) + Text(" of the Model to achieve the smallest possible error (minimizing the cost function).  ").font(textFont)
                         
                         
-                            
+                        
                     }.padding()
                         .opacity(cardIndex > 2 ? 1 : 0)
                         .animation(.spring(), value: self.cardIndex)
                     
                     Button(action: {
-                        if self.cardIndex < self.times.count - 1 {
+                        if self.cardIndex < self.times.count - 2 {
                             self.cardIndex += 1
                         } else {
                             self.slide += 1
@@ -247,7 +248,7 @@ struct WhatIsGradientDescentSlide: View {
         
         .overlay(
             CircleToLine(becomeLine: true)
-                
+            
                 .fill(
                     LinearGradient(colors: [Color("bg3"),Color("bg4")], startPoint: .top, endPoint: .bottomTrailing)
                 )
@@ -256,7 +257,7 @@ struct WhatIsGradientDescentSlide: View {
                 .transition(.scale)
                 .animation(.spring(response: 0.8, dampingFraction: 0.6, blendDuration: 1))
                 .offset(x: 0, y: (geoSize?.height ?? 100) / -2 + 100)
-                
+            
         )
     }
 }
@@ -272,10 +273,10 @@ struct NeuralNetwork: View {
 struct Basic2DGradientDescentSlide: View {
     @Binding var slide: Int
     let textFont = Font
-        .system(size: 22)
+        .system(size: 20)
         .monospaced()
     let boldedTextFont = Font
-        .system(size: 22)
+        .system(size: 20)
         .bold()
         .monospaced()
     
@@ -287,69 +288,133 @@ struct Basic2DGradientDescentSlide: View {
     
     @State var geo: GeometryProxy? = nil
     
-    let times = [1,2,2,2,2]
+    @State var xValue = 0.0
+    
+    @State var counter = 0
+    
+    
     var body: some View {
-        VStack {
-            HStack {
-                // explanation
-                VStack(alignment: .leading) {
-                    Text("How does Gradient Descent Work?")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding()
-                        .padding(.bottom)
-                    
-                    // at the same time card index 1, show the graph
-                    Group {
-                        Text("Say we have a model with just ").font(textFont) + Text("one adjustable parameter. ").font(boldedTextFont) + Text("The graph on the right is the graph of its ").font(textFont) + Text("cost function").font(boldedTextFont) + Text(", where the ").font(textFont) + Text("X").font(boldedTextFont) + Text(" axis represents the value of that one adjustable parameter and the ").font(textFont) + Text("Y").font(boldedTextFont) + Text(" axis represents the corresponding error produced by the model with parameter ").font(textFont) + Text("X").font(boldedTextFont) + Text(".").font(textFont)
-                    }.padding()
-                        .opacity(cardIndex > 0 ? 1 : 0)
-                        .animation(.spring(), value: self.cardIndex)
-                    
-                    //when its card index 2, wait 2 seconds and have the animation of the steps
-                    Group {
-                        Text("The model is initialized with an ").font(textFont) + Text("arbitrary starting point").font(boldedTextFont) + Text(" and from there, gradient descent calculates the ").font(textFont) + Text("derivative").font(boldedTextFont) + Text(" (or slope) of the point and adjust the Weights and Biases of the model to take a step in the direction with the steepest downward slope. ").font(textFont)
-                    }.padding()
-                        .opacity(cardIndex > 1 ? 1 : 0)
-                        .animation(.spring(), value: self.cardIndex)
-                    
-                    
-                    
-                    Button(action: {
-                        if self.cardIndex < self.times.count - 1 {
-                            self.cardIndex += 1
-                        } else {
-                            self.slide += 1
-                        }
-                    }, label: {
-                        Text("Next")
-                            .font(boldedTextFont)
+        
+        ZStack {
+            VStack {
+                HStack {
+                    // explanation
+                    VStack(alignment: .leading) {
+                        Text("How does Gradient Descent Work?")
+                            .font(.largeTitle)
+                            .bold()
                             .padding()
                             .padding(.bottom)
-                            .padding(.bottom)
-                            .irregularGradient(colors: [Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
-                            .scaleEffect(self.time % 2 == 0 ? 1 : 1.1)
-                            .animation(.easeInOut(duration: 1), value: self.time)
-                    })
+                        ScrollView {
+                            ScrollViewReader { value in
+                                VStack(alignment: .leading) {
+                                    
+                                    
+                                    // at the same time card index 1, show the graph
+                                    Group {
+                                        Text("Say we have a model with just ").font(textFont) + Text("one adjustable parameter. ").font(boldedTextFont) + Text("The graph on the right is the graph of its ").font(textFont) + Text("cost function").font(boldedTextFont) + Text(", where the ").font(textFont) + Text("X").font(boldedTextFont) + Text(" axis represents the value of that one adjustable parameter and the ").font(textFont) + Text("Y").font(boldedTextFont) + Text(" axis represents the corresponding error produced by the model with parameter ").font(textFont) + Text("X").font(boldedTextFont) + Text(".").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 0 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(0)
+                                    
+                                    //when its card index 2, wait 2 seconds and have the animation of the steps
+                                    Group {
+                                        Text("The model is initialized with an ").font(textFont) + Text("arbitrary starting point").font(boldedTextFont) + Text(" and the Gradient Descent algorithm adjusts the model to decrease the error as much as possible.").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 1  ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(1)
+                                    
+                                    Group {
+                                        Text("You try first! Adjust the slider below to get the model to have the lowest error rate").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 2  ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(2)
+                                    
+                                    Slider(value: $xValue, in: 0...10, onEditingChanged: { editing in
+                                        if round(xValue) == 5.0 {
+                                            self.counter += 1
+                                            print("REWARD!!!!!!!")
+                                            self.cardIndex += 1
+                                        }
+                                    }).padding()
+                                        .opacity(cardIndex > 2 ? 1 : 0)
+                                        .id(3)
+                                        .disabled(cardIndex != 3)
+                                    
+                                    Group {
+                                        Text("You got it! ").font(textFont).foregroundColor(.green)
+                                    }.padding()
+                                        .opacity(cardIndex > 3 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(4)
+                                    
+                                    
+                                    Group {
+                                        Text("Similar like what you did, gradient descent calculates the ").font(textFont) + Text("derivative").font(boldedTextFont) + Text(" (or slope) of the current point and adjust the Weights and Biases of the model to take steps in the direction with the ").font(textFont) + Text("steepest downward slope").font(boldedTextFont) + Text(" until it reduces the cost function to the minimum possible. (though you probably didn't do calculus in your head). ").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 4 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(5)
+                                    
+                                    
+                                    Group {
+                                        Text("To put it in other words, ").font(textFont)
+                                        
+                                        Text("Given an arbitrary starting point, the gradient descent algorithm will take steps in the direction of the steepest slope until it reaches the bottom. Click Next to see this in action!").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 5 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(6)
+                                    
+                                    Spacer()
+                                    
+                                    
+                                }
+                                
+                                .onChange(of: self.cardIndex) { _ in
+                                    withAnimation(.easeInOut) {
+                                        value.scrollTo(self.cardIndex, anchor: .center)
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                        if self.cardIndex != 3 {
+                            Button(action: {
+                                if self.cardIndex < 8 {
+                                    self.cardIndex += 1
+                                } else {
+                                    self.slide += 1
+                                }
+                            }, label: {
+                                Text("Next")
+                                    .font(boldedTextFont)
+                                    .padding()
+                                    .padding(.bottom)
+                                    .padding(.bottom)
+                                    .irregularGradient(colors: [Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
+                                    .scaleEffect(self.time % 2 == 0 ? 1 : 1.1)
+                                    .animation(.easeInOut(duration: 1), value: self.time)
+                            })
+                        }
+                    }
                     
-                    Spacer()
-                    
-                    
+                    // intearctive stuff !!!
+                    HStack {
+                        SimpleInteractiveGraph2DView(cardIndex: $cardIndex, xValue: $xValue)
+                            .opacity(self.hideOverlayLine ? 1 : 0)
+                            .animation(.default, value: self.hideOverlayLine)
+                    }//.frame(width: (geo?.size.width ?? 100) * 0.4)
                 }
-                
-                
-                Spacer()
-                // intearctive stuff !!!
-                HStack {
-                    SimpleInteractiveGraph2DView(cardIndex: $cardIndex)
-                        .opacity(self.hideOverlayLine ? 1 : 0)
-                        .animation(.default, value: self.hideOverlayLine)
-                }//.frame(width: (geo?.size.width ?? 100) * 0.4)
+                .padding(.top)
+                .padding()
             }
-            .padding(.top)
-            .padding()
+            ConfettiCannon(counter: self.$counter, num: 100, radius: 450)
         }
-        
         .onAppear {
         }
         .onReceive(timer) { date in
@@ -371,7 +436,7 @@ struct Basic2DGradientDescentSlide: View {
         
         .overlay(
             CircleToLine(becomeLine: true)
-                
+            
                 .fill(
                     LinearGradient(colors: [Color("bg3"),Color("bg4")], startPoint: .top, endPoint: .bottomTrailing)
                 )
@@ -382,7 +447,7 @@ struct Basic2DGradientDescentSlide: View {
                 .offset(x: 0, y: (geo?.size.height ?? 100) / -2 + 160)
                 .opacity(self.hideOverlayLine ? 0 : 1)
                 .animation(.default, value: self.hideOverlayLine)
-                
+            
         )
         
     }

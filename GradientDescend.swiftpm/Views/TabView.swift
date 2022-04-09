@@ -13,8 +13,8 @@ import CoreMotion
 
 
 enum MainView {
-    case learnView
-    case gameView
+    case learn2DGDView
+    case learn3DGDView
     case aboutView
 }
 
@@ -22,7 +22,7 @@ enum MainView {
 struct TabView: View {
     @State var zoomedOut = false
     @State var offset = CGSize.zero
-    @State var selectedView: MainView = .learnView
+    @State var selectedView: MainView = .learn2DGDView
     @State var geo: GeometryProxy?
     
     var body: some View {
@@ -34,14 +34,14 @@ struct TabView: View {
                 //background
                 
                 
-                GameView()
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .gameView, geo: $geo)
+                Learn3DGDViewGDView()
+                    .displayContainerHelper(moduleName: "Multidimensional Gradient Descent", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 AboutView()
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
+                    .displayContainerHelper(moduleName: "About", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
-                LearnView(geo:$geo)
-                    .displayContainerHelper(selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learnView, geo: $geo)
+                Learn2DGDView(geo:$geo)
+                    .displayContainerHelper(moduleName: "Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 ZStack(alignment: .bottomTrailing) {
@@ -82,28 +82,36 @@ struct TabView: View {
 
 /// helps display container correctly display and animate when zoomed out
 struct DisplayContainerHelper: ViewModifier{
+    var moduleName: String
     @Binding var selectedView: MainView
     @Binding var zoomedOut: Bool
     var viewType: MainView
     @Binding var geo: GeometryProxy?
     
     func body(content: Content) -> some View {
-        ZStack (alignment:.center) {
+        VStack (alignment:.center) {
+        ZStack{
             Color.white
             content
-                
         }
-        .disabled(self.zoomedOut)
+                .disabled(self.zoomedOut)
+                
+                .frame(width: self.zoomedOut ? self.viewSize().width : nil, height: self.zoomedOut ? self.viewSize().height : nil)
+                .cornerRadius(zoomedOut ? 18 : 0)
+                .padding(self.zoomedOut ? 11 : 0)
+                .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).softOuterShadow() : Rectangle().foregroundColor(.white).opacity(0).softOuterShadow() )
+                .cornerRadius(zoomedOut ? 24 : 0)
+
+            if self.zoomedOut {
+            Text(moduleName)
+                .font(.system(size: 26).monospaced().bold())
+                .foregroundColor(.white)
+            }
+        }
         .zIndex(self.selectedView == self.viewType ? 1 : 0)
-        .frame(width: self.zoomedOut ? self.viewSize().width : nil, height: self.zoomedOut ? self.viewSize().height : nil)
 
-        .cornerRadius(zoomedOut ? 18 : 0)
-        .padding(self.zoomedOut ? 11 : 0)
-        .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).softOuterShadow() : Rectangle().foregroundColor(.white).opacity(0).softOuterShadow() )
-
-        .cornerRadius(zoomedOut ? 24 : 0)
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .gameView ? .learnView : .gameView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learnView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .learn3DGDView ? .learn2DGDView : .learn3DGDView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learn2DGDView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
         
         .onTapGesture {
             if self.zoomedOut {
@@ -158,8 +166,8 @@ struct Gyroscope3DEffect: ViewModifier {
 }
 
 extension View {
-    func displayContainerHelper(selectedView: Binding<MainView>, zoomedOut: Binding<Bool>,viewType: MainView, geo:Binding<GeometryProxy?>) -> some View{
-        return modifier(DisplayContainerHelper(selectedView: selectedView, zoomedOut: zoomedOut, viewType: viewType, geo:geo))
+    func displayContainerHelper(moduleName: String, selectedView: Binding<MainView>, zoomedOut: Binding<Bool>,viewType: MainView, geo:Binding<GeometryProxy?>) -> some View{
+        return modifier(DisplayContainerHelper(moduleName: moduleName, selectedView: selectedView, zoomedOut: zoomedOut, viewType: viewType, geo:geo))
     }
     
     func gyroscope3DEffect(zoomedOut: Binding<Bool>) -> some View {

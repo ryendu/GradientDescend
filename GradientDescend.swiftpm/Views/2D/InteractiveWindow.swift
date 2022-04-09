@@ -27,7 +27,7 @@ struct InteractiveWindow: View {
             content[self.slide]
             
         }
-        .overlay(ControlsCard(slide:$slide, maxSlides: content.count - 1),alignment: .bottomLeading)
+//        .overlay(ControlsCard(slide:$slide, maxSlides: content.count - 1),alignment: .bottomLeading)
     }
 }
 
