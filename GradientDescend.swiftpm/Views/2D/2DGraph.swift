@@ -23,29 +23,67 @@ struct SimpleInteractiveGraph2DView: View {
                         path.addCurve(to: CGPoint(x: help.geo.size.width, y: 0), control1: CGPoint(x: help.geo.size.width / 4, y: help.geo.size.height * 1.25), control2: CGPoint(x: help.geo.size.width - help.geo.size.width / 4, y: help.geo.size.height * 1.25))
                         
                         
+                        
+                        
                     }.trim(from: 0, to: self.cardIndex > 0 ? 1 : 0)
                         
                         .stroke(Color("bg5"), lineWidth: 3)
                         
                         .animation(.easeIn(duration: 2), value: self.cardIndex)
                     
-                    // at card index 1 get arbitrary starting point
+                    getStepPath(help: help)
+                        .trim(from: 0, to: self.cardIndex > 6 ? 1 : 0)
+                        .stroke(.purple, lineWidth: 3)
+                        .animation(.easeIn(duration: 3), value: self.cardIndex)
+                        
+                    
                     Circle()
                         .frame(width: 25, height: 25)
                         .irregularGradient(colors: [Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
                         .opacity(self.cardIndex > 1 ? 1 : 0)
                         .animation(.default, value: self.cardIndex)
                         .position(x: xValue * help.xScale, y: yOf(xValue * help.xScale, help: help))
-                    
+
                     
 //
                     //card index 2 take steps
                 }
                 .onChange(of: cardIndex, perform: {a in
-                    
+                    if a == 6 {
+                        self.xValue = 0
+                    } else if a == 7 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            self.xValue = 5
+                        }
+                        
+                    }
                 })
             })
         }
+    }
+    func getStepPath(help: GridInfo) -> Path{
+        // step size
+//        let stepSize = CGPoint(x: 1 * help.xScale, y: 1 * help.yScale)
+        let stepSize = 1.0
+        let steps = 5
+        
+        var path = Path()
+        
+        for i in 0..<steps {
+            let xStart = stepSize * Double(i) * help.xScale
+            let xNext = xStart + help.xScale
+            
+            path.move(to: CGPoint(x: xStart, y: yOf(xStart, help: help)))
+            
+            path.addQuadCurve(to: CGPoint(x: xNext, y: yOf(xNext, help: help)), control: CGPoint(x: xNext + 1 * help.xScale, y: (yOf(xNext, help: help) + yOf(xStart, help: help)) / 2.0))
+            
+//            path.addArc(center: CGPoint(x: xNext, y: yOf(xNext, help: help)), radius: stepSize * help.xScale, startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 180), clockwise: true)
+//            path.addLine(to: CGPoint(x: xNext, y: yOf(xNext, help: help)))
+            print("s \(xStart), c \(xNext), i \(i)")
+            
+        }
+        
+        return path
     }
     func yOf(_ x: CGFloat, help: GridInfo) -> CGFloat {
         // p0 and p2 are end points of line

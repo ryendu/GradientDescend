@@ -369,6 +369,15 @@ struct Basic2DGradientDescentSlide: View {
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(6)
                                     
+                                    Group {
+                                        
+                                        //TODO: Seperate the below into two blocks of text
+                                        Text("As you can see, as gradient descent gets closer and closer to the minimum, it takes smaller and smaller steps until it has reached the convergence point (lowest point). Now you should have a basic understanding of how gradient descent works! Click next to move on to the next section.").font(textFont)
+                                    }.padding()
+                                        .opacity(cardIndex > 6 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
+                                        .id(7)
+                                    
                                     Spacer()
                                     
                                     
@@ -385,7 +394,7 @@ struct Basic2DGradientDescentSlide: View {
                         
                         if self.cardIndex != 3 {
                             Button(action: {
-                                if self.cardIndex < 8 {
+                                if self.cardIndex < 7 {
                                     self.cardIndex += 1
                                 } else {
                                     self.slide += 1
