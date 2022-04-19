@@ -11,6 +11,8 @@ import SwiftUI
 struct Learn2DGDView: View {
     @State var slide = 0
     @Binding var geo: GeometryProxy?
+    @Binding var zoomedOut: Bool
+    @Binding var selectedView: MainView
     var body: some View {
         InteractiveWindow(slide: $slide) {
             
@@ -20,15 +22,9 @@ struct Learn2DGDView: View {
             
             Basic2DGradientDescentSlide(slide: $slide)
             
-            MoreComplex2DGDSlide(slide: $slide)
+            MoreComplex2DGDSlide(slide: $slide, zoomedOut: self.$zoomedOut, selectedView: $selectedView)
             
-            Simple3DGDSlide(slide: $slide)
-            
-            Complex3DGDSlide(slide: $slide)
-            
-            NextSteps(slide: $slide)
-            
-        }.preferredColorScheme(.light)
+        }
     }
 }
 

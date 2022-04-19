@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ConfettiSwiftUI",
+        "repositoryURL": "https://github.com/simibac/ConfettiSwiftUI.git",
+        "state": {
+          "branch": null,
+          "revision": "97fa443e5c054ca3162826b556315ca442bedb39",
+          "version": "0.3.1"
+        }
+      },
+      {
+        "package": "FontBlaster",
+        "repositoryURL": "https://github.com/ArtSabintsev/FontBlaster.git",
+        "state": {
+          "branch": "master",
+          "revision": "6734d3929d019e4a36b7aa771232cfca65ff99b4",
+          "version": null
+        }
+      },
+      {
+        "package": "IrregularGradient",
+        "repositoryURL": "https://github.com/joogps/IrregularGradient.git",
+        "state": {
+          "branch": null,
+          "revision": "0e61dddde5d42806fab3b6254217fe05a4c551aa",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "Neumorphic",
+        "repositoryURL": "https://github.com/costachung/neumorphic",
+        "state": {
+          "branch": "master",
+          "revision": "ece63559ba075e2546600450c37cde82cc463537",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

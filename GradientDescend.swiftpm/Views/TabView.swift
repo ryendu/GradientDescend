@@ -34,13 +34,13 @@ struct TabView: View {
                 //background
                 
                 
-                Learn3DGDViewGDView()
+                Learn3DGDViewGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
                     .displayContainerHelper(moduleName: "Multidimensional Gradient Descent", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 AboutView()
                     .displayContainerHelper(moduleName: "About", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
-                Learn2DGDView(geo:$geo)
+                Learn2DGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
                     .displayContainerHelper(moduleName: "Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
@@ -62,7 +62,7 @@ struct TabView: View {
             }.ignoresSafeArea(edges: .top)
             .background(
                 Rectangle()
-                    .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
+                    .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg1"), speed: 12.0)
                     .scaledToFill()
                     .ignoresSafeArea()
                     .zIndex(-1)

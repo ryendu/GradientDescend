@@ -16,6 +16,8 @@ let package = Package(
         .iOSApplication(
             name: "GradientDescend",
             targets: ["AppModule"],
+            bundleIdentifier: "com.ryandu.gradient-descend",
+            teamIdentifier: "95566VVRBB",
             displayVersion: "1.0",
             bundleVersion: "1",
             iconAssetName: "AppIcon",
@@ -32,10 +34,32 @@ let package = Package(
             ]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/joogps/IrregularGradient.git", "1.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/costachung/neumorphic", .branch("master")),
+        .package(url: "https://github.com/ArtSabintsev/FontBlaster.git", .branch("master")),
+        .package(url: "https://github.com/simibac/ConfettiSwiftUI.git", "0.3.1"..<"1.0.0")
+    ],
     targets: [
         .executableTarget(
             name: "AppModule",
-            path: "."
+            dependencies: [
+                .product(name: "IrregularGradient", package: "irregulargradient"),
+                .product(name: "Neumorphic", package: "neumorphic"),
+                .product(name: "FontBlaster", package: "fontblaster"),
+                .product(name: "ConfettiSwiftUI", package: "confettiswiftui")
+            ],
+            path: ".",
+            resources: [
+                .process("Resources/Fonts/Montserrat-Bold.ttf"),
+                .process("Resources/Fonts/Montserrat-Light.ttf"),
+                .process("Resources/Fonts/Montserrat-SemiBold.ttf"),
+                .process("Resources/Fonts/Montserrat-Regular.ttf"),
+                .process("Resources/Fonts/Roboto Mono Light.ttf"),
+                .process("Resources/simple3dgd.scn"),
+                .process("Resources/simple3dgd.obj"),
+                
+            ]
         )
     ]
 )
