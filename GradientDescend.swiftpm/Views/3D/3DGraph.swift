@@ -28,15 +28,20 @@ struct Simple3DView: View, Equatable {
     @Binding var cardIndex: Int
     
     
-    var scene = Simple3DScene(make: true)
+    @State var scene = Simple3DScene(make: true)
     var body: some View {
         SceneView(scene: scene, options: [.autoenablesDefaultLighting, .allowsCameraControl])
             .ignoresSafeArea()
+            .onChange(of: self.cardIndex) { i in
+                self.scene.cardIndexUpdated(cardIndex: self.cardIndex)
+            }
     }
+        
     
 }
 
 class Simple3DScene: SCNScene {
+    var modelPosition: SCNVector3? = nil
     convenience init(make:Bool){
         self.init()
         
@@ -60,11 +65,24 @@ class Simple3DScene: SCNScene {
         
         //create the graph
         
-        var modelGraph = SCNScene(named: "simple3dgd.scn")!.rootNode
+        let modelGraph = SCNScene(named: "simple3dgd.obj")!.rootNode
         modelGraph.scale = SCNVector3(x: 3.0 * Float(scale), y: 3.0 * Float(scale), z: 3.0 * Float(scale))
-        modelGraph.position = SCNVector3(x: Float(xAxisTotal / 2) * Float(stepSize * scale), y: 0.0, z: Float(zAxisTotal / 2) * Float(stepSize * scale))
+        self.modelPosition = SCNVector3(x: Float(xAxisTotal / 2) * Float(stepSize * scale), y: 0.0, z: Float(zAxisTotal / 2) * Float(stepSize * scale))
+        modelGraph.position = self.modelPosition!
+        
+        
+        let modelGraphPhysicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(
+            node: modelGraph,
+            options: [
+                .collisionMargin: 0.0,
+                .type: SCNPhysicsShape.ShapeType.concavePolyhedron
+            ]
+        ))
+        modelGraph.physicsBody = modelGraphPhysicsBody
         
         rootNode.addChildNode(modelGraph)
+        
+//        self.physicsWorld.gr
         
     }
     
@@ -103,7 +121,6 @@ class Simple3DScene: SCNScene {
         }
 
 
-
         //YZ
         for z in 0...zAxisTotal {
             let node = SCNNode(geometry: SCNCylinder(radius: 0.02, height: CGFloat(yAxisTotal) * scale))
@@ -116,7 +133,6 @@ class Simple3DScene: SCNScene {
             node.position = SCNVector3(x: 0.0, y: Float(CGFloat(y) * scale) - Float(CGFloat(yAxisTotal) * scale) / 2, z: Float(CGFloat(zAxisTotal) * scale) / 2)
             mainNode.addChildNode(node)
         }
-        
         
         
         //XZ
@@ -134,5 +150,31 @@ class Simple3DScene: SCNScene {
         }
         
         return mainNode
+    }
+    
+    func cardIndexUpdated(cardIndex: Int) {
+        //TODO: do stuff here
+        let numberOfBalls = 1
+        guard let modelPosition = modelPosition else {
+            return
+        }
+        if cardIndex > 1 {
+            print("UPDATED")
+            let balls = SCNNode()
+            for _ in 0...numberOfBalls {
+                let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
+                var ballPosition = modelPosition
+                ballPosition.y = ballPosition.y + 4
+                ball.position = ballPosition
+                
+                let ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 0.5)))
+                ballPhysicsBody.isAffectedByGravity = true
+                
+                ball.physicsBody = ballPhysicsBody
+                balls.addChildNode(ball)
+            }
+            self.rootNode.addChildNode(balls)
+        }
+        
     }
 }
