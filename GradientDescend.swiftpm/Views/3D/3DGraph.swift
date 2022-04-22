@@ -65,11 +65,11 @@ class Simple3DScene: SCNScene {
         
         //create the graph
         
-        let modelGraph = SCNScene(named: "simple3dgd.obj")!.rootNode
+        let modelGraph = SCNScene(named: "simple3dgd.scn")!.rootNode
         modelGraph.scale = SCNVector3(x: 3.0 * Float(scale), y: 3.0 * Float(scale), z: 3.0 * Float(scale))
         self.modelPosition = SCNVector3(x: Float(xAxisTotal / 2) * Float(stepSize * scale), y: 0.0, z: Float(zAxisTotal / 2) * Float(stepSize * scale))
         modelGraph.position = self.modelPosition!
-        
+        modelGraph.geometry?.materials[0].isDoubleSided = true
         
         let modelGraphPhysicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(
             node: modelGraph,
@@ -154,26 +154,21 @@ class Simple3DScene: SCNScene {
     
     func cardIndexUpdated(cardIndex: Int) {
         //TODO: do stuff here
-        let numberOfBalls = 1
         guard let modelPosition = modelPosition else {
             return
         }
         if cardIndex > 1 {
             print("UPDATED")
-            let balls = SCNNode()
-            for _ in 0...numberOfBalls {
-                let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
-                var ballPosition = modelPosition
-                ballPosition.y = ballPosition.y + 4
-                ball.position = ballPosition
-                
-                let ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 0.5)))
-                ballPhysicsBody.isAffectedByGravity = true
-                
-                ball.physicsBody = ballPhysicsBody
-                balls.addChildNode(ball)
-            }
-            self.rootNode.addChildNode(balls)
+            let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
+            var ballPosition = modelPosition
+            ballPosition.y = ballPosition.y + 4
+            ball.position = ballPosition
+            
+            let ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 0.5)))
+            ballPhysicsBody.isAffectedByGravity = true
+            
+            ball.physicsBody = ballPhysicsBody
+            self.rootNode.addChildNode(ball)
         }
         
     }

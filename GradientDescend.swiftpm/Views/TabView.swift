@@ -15,14 +15,14 @@ import CoreMotion
 enum MainView {
     case learn2DGDView
     case learn3DGDView
-    case aboutView
+    case basic2dView
 }
 
 
 struct TabView: View {
     @State var zoomedOut = false
     @State var offset = CGSize.zero
-    @State var selectedView: MainView = .learn2DGDView
+    @State var selectedView: MainView = .basic2dView
     @State var geo: GeometryProxy?
     
     var body: some View {
@@ -35,11 +35,13 @@ struct TabView: View {
                 
                 
                 Learn3DGDViewGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "Multidimensional Gradient Descent", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
+                    .displayContainerHelper(moduleName: "Gradient Descent Like Gravity", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
-                AboutView()
-                    .displayContainerHelper(moduleName: "About", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .aboutView, geo: $geo)
+                
+                Basic2DView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
+                    .displayContainerHelper(moduleName: "What Is Gradient Descent?", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .basic2dView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
+                
                 Learn2DGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
                     .displayContainerHelper(moduleName: "Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
@@ -111,7 +113,7 @@ struct DisplayContainerHelper: ViewModifier{
         .zIndex(self.selectedView == self.viewType ? 1 : 0)
 
         .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .learn3DGDView ? .learn2DGDView : .learn3DGDView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .aboutView ? .learn2DGDView : .aboutView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .basic2dView ? .learn2DGDView : .basic2dView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
         
         .onTapGesture {
             if self.zoomedOut {

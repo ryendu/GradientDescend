@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var skipOnboarding = false
+    @State var skipOnboarding = true
     @State var finishedOnboarding = false
     var body: some View {
         VStack{
-            if self.skipOnboarding || self.finishedOnboarding{
+            if !self.skipOnboarding || self.finishedOnboarding{
                 TabView()
             } else {
                 OnboardingView(finishedOnboarding: self.$finishedOnboarding)

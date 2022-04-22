@@ -58,6 +58,7 @@ let package = Package(
                 .process("Resources/Fonts/Roboto Mono Light.ttf"),
                 .process("Resources/simple3dgd.scn"),
                 .process("Resources/simple3dgd.obj"),
+                .process("Resources/simple3dgd.stl"),
                 
             ]
         )

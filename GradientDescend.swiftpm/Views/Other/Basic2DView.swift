@@ -8,17 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct Learn2DGDView: View {
-    @State var slide = 0
+struct Basic2DView: View {
     @Binding var geo: GeometryProxy?
     @Binding var zoomedOut: Bool
     @Binding var selectedView: MainView
     var body: some View {
 //        InteractiveWindow(slide: $slide) {
-            MoreComplex2DGDSlide(slide: $slide, zoomedOut: self.$zoomedOut, selectedView: $selectedView)
+            Basic2DGradientDescentSlide(zoomedOut: $zoomedOut, selectedView: $selectedView)
 //            Text("")
 //        }
     }
 }
-
-
