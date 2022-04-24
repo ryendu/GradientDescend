@@ -7,29 +7,6 @@
 
 import Foundation
 import SwiftUI
-//import IrregularGradient
-//import ConfettiSwiftUI
-
-struct CircleToLine: Shape {
-    
-    var becomeLine: Bool
-    
-    var animatableData: Bool {
-        get { becomeLine }
-        set { becomeLine = newValue }
-    }
-    
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.addEllipse(in: rect)
-        
-        if self.becomeLine {
-            path.addRect(rect)
-        }
-        
-        return path
-    }
-}
 
 struct Bubble: Identifiable, Hashable {
     var id = UUID()
@@ -41,17 +18,6 @@ struct Bubble: Identifiable, Hashable {
     var y: Double
 }
 
-
-
-
-
-struct NeuralNetwork: View {
-    var body: some View {
-        VStack{
-            //TODO: IF HAS TIME
-        }
-    }
-}
 
 struct Basic2DGradientDescentSlide: View {
     let textFont = Font

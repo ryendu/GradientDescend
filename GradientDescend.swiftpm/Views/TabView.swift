@@ -61,7 +61,7 @@ struct TabView: View {
                         
                     })
                 }.zIndex(2).offset(x: (geo?.size.width ?? 500) / 2 - 70, y: (geo?.size.height ?? 500) / 2 - 70)
-                
+                  
                 
             }.ignoresSafeArea(edges: .top)
             .background(
@@ -80,6 +80,7 @@ struct TabView: View {
                         print(geo.size)
                     })
             })
+            
     }
 }
 
