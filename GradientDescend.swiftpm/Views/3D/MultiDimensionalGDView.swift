@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MultiDimensionalGDView.swift
 //  GradientDescend
 //
 //  Created by Ryan D on 4/5/22.
@@ -14,6 +14,6 @@ struct Learn3DGDViewGDView: View {
     @Binding var zoomedOut: Bool
     @Binding var selectedView: MainView
     var body: some View {
-            Simple3DGDSlide(slide: $slide)
+        Simple3DGDSlide(slide: $slide)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MyApp.swift
 //  GradientDescend
 //
 //  Created by Ryan D on 4/5/22.

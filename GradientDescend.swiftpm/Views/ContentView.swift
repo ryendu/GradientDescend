@@ -11,15 +11,14 @@ import AVFoundation
 
 /*
  Hey There! 👋
-
- I'm Ryan, welcome to my swift playground app, GradientDescend,
- where we will descend into how Gradient Descent work!
  
- **GradientDescend** is best experienced full screen in landscape.
+ I'm Ryan, welcome to my swift playground app, GradientDescend!
+ In this playground app we will descend into how Gradient Descent works!
+ 
+ GradientDescend is best experienced full screen in landscape.
  The build process might take a moment so hold tight enjoy!
  
-*/
-
+ */
 
 
 

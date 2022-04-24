@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Slides3D.swift
 //  
 //
 //  Created by Ryan D on 4/17/22.
@@ -133,14 +133,12 @@ struct Simple3DGDSlide: View {
                         }
                     }
                     
-                    // intearctive stuff !!!
+                    // interactive stuff !!!
                     HStack {
                         
                         Simple3DView(dropBall: $dropBall)
                             .id("grid")
-//                            .opacity(self.hideOverlayLine ? 1 : 0)
-//                            .animation(.default, value: self.hideOverlayLine)
-                    }//.frame(width: (geo?.size.width ?? 100) * 0.4)
+                    }
                 }
                 .padding(.top)
                 .padding()

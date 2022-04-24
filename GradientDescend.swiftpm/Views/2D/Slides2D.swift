@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Slides2D.swift
 //  
 //
 //  Created by Ryan D on 4/6/22.
@@ -181,12 +181,12 @@ struct Basic2DGradientDescentSlide: View {
                         }
                     }
                     
-                    // intearctive stuff !!!
+                    // interactive stuff !!!
                     HStack {
                         SimpleInteractiveGraph2DView(cardIndex: $cardIndex, xValue: $xValue)
                             .opacity(self.hideOverlayLine ? 1 : 0)
                             .animation(.default, value: self.hideOverlayLine)
-                    }//.frame(width: (geo?.size.width ?? 100) * 0.4)
+                    }
                 }
                 .padding(.top)
                 .padding()
@@ -300,27 +300,27 @@ struct MoreComplex2DGDSlide: View {
                                     
                                     Group {
                                         
-                                    Slider(value: $learningRateIndx, in: 1.0...5.0, onEditingChanged: { editing in
-                                        // todo [0.001,0.005,0.01,0.10,0.1]
-                                        // default is 0.005
-                                        if Int(round(learningRateIndx)) == 1 {
-                                            self.learningRate = 0.001
-                                            self.learningRateIndx = 1
-                                        } else if Int(round(learningRateIndx)) == 2 {
-                                            self.learningRate = 0.005
-                                            self.learningRateIndx = 2
-                                        } else if Int(round(learningRateIndx)) == 3 {
-                                            self.learningRate = 0.01
-                                            self.learningRateIndx = 3
-                                        } else if Int(round(learningRateIndx)) == 4 {
-                                            self.learningRate = 0.1
-                                            self.learningRateIndx = 4
-                                        } else {
-                                            self.learningRate = 1
-                                            self.learningRateIndx = 5
-                                        }
-                                    }).padding()
-                                    
+                                        Slider(value: $learningRateIndx, in: 1.0...5.0, onEditingChanged: { editing in
+                                            // todo [0.001,0.005,0.01,0.10,0.1]
+                                            // default is 0.005
+                                            if Int(round(learningRateIndx)) == 1 {
+                                                self.learningRate = 0.001
+                                                self.learningRateIndx = 1
+                                            } else if Int(round(learningRateIndx)) == 2 {
+                                                self.learningRate = 0.005
+                                                self.learningRateIndx = 2
+                                            } else if Int(round(learningRateIndx)) == 3 {
+                                                self.learningRate = 0.01
+                                                self.learningRateIndx = 3
+                                            } else if Int(round(learningRateIndx)) == 4 {
+                                                self.learningRate = 0.1
+                                                self.learningRateIndx = 4
+                                            } else {
+                                                self.learningRate = 1
+                                                self.learningRateIndx = 5
+                                            }
+                                        }).padding()
+                                        
                                         HStack{
                                             Spacer()
                                             Text(String(format: "Learning rate: %.3f", learningRate))
@@ -328,9 +328,9 @@ struct MoreComplex2DGDSlide: View {
                                                 .padding()
                                             Spacer()
                                         }
-                                }
-                                        .opacity(cardIndex > 2 ? 1 : 0)
-                                        .id(2)
+                                    }
+                                    .opacity(cardIndex > 2 ? 1 : 0)
+                                    .id(2)
                                     
                                     Group {
                                         Text("""
@@ -411,7 +411,7 @@ struct MoreComplex2DGDSlide: View {
                         ComplexInteractiveGraph2DView(cardIndex: $cardIndex, xValue: $xValue, learningRateIndx: $learningRateIndx)
                             .opacity(self.hideOverlayLine ? 1 : 0)
                             .animation(.default, value: self.hideOverlayLine)
-                    }//.frame(width: (geo?.size.width ?? 100) * 0.4)
+                    }
                 }
                 .padding(.top)
                 .padding()

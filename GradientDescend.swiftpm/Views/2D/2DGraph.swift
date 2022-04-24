@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-//import IrregularGradient
 
 struct SimpleInteractiveGraph2DView: View {
     @Binding var cardIndex: Int
@@ -19,7 +18,6 @@ struct SimpleInteractiveGraph2DView: View {
                     Path { path in
                         //graphing x^2
                         path.move(to: CGPoint(x: 0, y: 0))
-                        //                        path.addQuadCurve(to: CGPoint(x: help.geo.size.width, y: help.geo.size.height -  8 * help.yScale), control: CGPoint(x: help.geo.size.width / 2, y: help.geo.size.height * 1.25))
                         path.addCurve(to: CGPoint(x: help.geo.size.width, y: 0), control1: CGPoint(x: help.geo.size.width / 4, y: help.geo.size.height * 1.25), control2: CGPoint(x: help.geo.size.width - help.geo.size.width / 4, y: help.geo.size.height * 1.25))
                         
                         
@@ -45,8 +43,6 @@ struct SimpleInteractiveGraph2DView: View {
                         .position(x: xValue * help.xScale, y: yOf(xValue * help.xScale, help: help))
                     
                     
-                    //
-                    //card index 2 take steps
                 }
                 .onChange(of: cardIndex, perform: {a in
                     if a == 6 {
@@ -63,7 +59,6 @@ struct SimpleInteractiveGraph2DView: View {
     }
     func getStepPath(help: GridInfo) -> Path{
         // step size
-        //        let stepSize = CGPoint(x: 1 * help.xScale, y: 1 * help.yScale)
         let stepSize = 1.0
         let steps = 5
         
@@ -76,9 +71,6 @@ struct SimpleInteractiveGraph2DView: View {
             path.move(to: CGPoint(x: xStart, y: yOf(xStart, help: help)))
             
             path.addQuadCurve(to: CGPoint(x: xNext, y: yOf(xNext, help: help)), control: CGPoint(x: xNext + 1 * help.xScale, y: (yOf(xNext, help: help) + yOf(xStart, help: help)) / 2.0))
-            
-            //            path.addArc(center: CGPoint(x: xNext, y: yOf(xNext, help: help)), radius: stepSize * help.xScale, startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 180), clockwise: true)
-            //            path.addLine(to: CGPoint(x: xNext, y: yOf(xNext, help: help)))
             
         }
         
@@ -172,9 +164,6 @@ struct ComplexInteractiveGraph2DView: View {
                         .animation(.default, value: self.cardIndex)
                         .position(x: circlePosition.x, y: circlePosition.y)
                     
-                    
-                    //
-                    //card index 2 take steps
                 }
                 .onAppear {
                     circlePosition = CGPoint(x: 0, y: help.yScale * 2)
@@ -279,20 +268,20 @@ struct ComplexInteractiveGraph2DView: View {
     
     func gradientDescentLR_1(rect: CGRect) -> Path {
         var path = Path()
-                let width = rect.size.width
-                let height = rect.size.height
-                path.move(to: CGPoint(x: 0.00343*width, y: 0.13323*height))
-                path.addCurve(to: CGPoint(x: 0.93936*width, y: 0.06975*height), control1: CGPoint(x: 0.13654*width, y: 0.05068*height), control2: CGPoint(x: 0.51007*width, y: -0.07759*height))
-                path.addCurve(to: CGPoint(x: 0.03318*width, y: 0.23041*height), control1: CGPoint(x: 0.71625*width, y: 0.03918*height), control2: CGPoint(x: 0.22265*width, y: 0.02853*height))
-                path.addCurve(to: CGPoint(x: 0.81465*width, y: 0.30486*height), control1: CGPoint(x: 0.22922*width, y: 0.17085*height), control2: CGPoint(x: 0.65995*width, y: 0.10235*height))
-                path.addCurve(to: CGPoint(x: 0.127*width, y: 0.38793*height), control1: CGPoint(x: 0.65522*width, y: 0.2662*height), control2: CGPoint(x: 0.29451*width, y: 0.22868*height))
-                path.addCurve(to: CGPoint(x: 0.85584*width, y: 0.22179*height), control1: CGPoint(x: 0.22731*width, y: 0.24843*height), control2: CGPoint(x: 0.5135*width, y: 0.01991*height))
-                path.addCurve(to: CGPoint(x: 0.42792*width, y: 0.3989*height), control1: CGPoint(x: 0.754*width, y: 0.21891*height), control2: CGPoint(x: 0.52586*width, y: 0.25031*height))
-                path.addCurve(to: CGPoint(x: 0.74943*width, y: 0.45611*height), control1: CGPoint(x: 0.53509*width, y: 0.34613*height), control2: CGPoint(x: 0.74943*width, y: 0.2837*height))
-                path.addCurve(to: CGPoint(x: 0.3524*width, y: 0.32994*height), control1: CGPoint(x: 0.71014*width, y: 0.3861*height), control2: CGPoint(x: 0.57574*width, y: 0.26285*height))
-                path.addCurve(to: CGPoint(x: 0.83982*width, y: 0.25549*height), control1: CGPoint(x: 0.38291*width, y: 0.26541*height), control2: CGPoint(x: 0.52311*width, y: 0.16019*height))
-                path.addCurve(to: CGPoint(x: 0.46911*width, y: 0.48119*height), control1: CGPoint(x: 0.76316*width, y: 0.25575*height), control2: CGPoint(x: 0.58169*width, y: 0.30125*height))
-                return path
+        let width = rect.size.width
+        let height = rect.size.height
+        path.move(to: CGPoint(x: 0.00343*width, y: 0.13323*height))
+        path.addCurve(to: CGPoint(x: 0.93936*width, y: 0.06975*height), control1: CGPoint(x: 0.13654*width, y: 0.05068*height), control2: CGPoint(x: 0.51007*width, y: -0.07759*height))
+        path.addCurve(to: CGPoint(x: 0.03318*width, y: 0.23041*height), control1: CGPoint(x: 0.71625*width, y: 0.03918*height), control2: CGPoint(x: 0.22265*width, y: 0.02853*height))
+        path.addCurve(to: CGPoint(x: 0.81465*width, y: 0.30486*height), control1: CGPoint(x: 0.22922*width, y: 0.17085*height), control2: CGPoint(x: 0.65995*width, y: 0.10235*height))
+        path.addCurve(to: CGPoint(x: 0.127*width, y: 0.38793*height), control1: CGPoint(x: 0.65522*width, y: 0.2662*height), control2: CGPoint(x: 0.29451*width, y: 0.22868*height))
+        path.addCurve(to: CGPoint(x: 0.85584*width, y: 0.22179*height), control1: CGPoint(x: 0.22731*width, y: 0.24843*height), control2: CGPoint(x: 0.5135*width, y: 0.01991*height))
+        path.addCurve(to: CGPoint(x: 0.42792*width, y: 0.3989*height), control1: CGPoint(x: 0.754*width, y: 0.21891*height), control2: CGPoint(x: 0.52586*width, y: 0.25031*height))
+        path.addCurve(to: CGPoint(x: 0.74943*width, y: 0.45611*height), control1: CGPoint(x: 0.53509*width, y: 0.34613*height), control2: CGPoint(x: 0.74943*width, y: 0.2837*height))
+        path.addCurve(to: CGPoint(x: 0.3524*width, y: 0.32994*height), control1: CGPoint(x: 0.71014*width, y: 0.3861*height), control2: CGPoint(x: 0.57574*width, y: 0.26285*height))
+        path.addCurve(to: CGPoint(x: 0.83982*width, y: 0.25549*height), control1: CGPoint(x: 0.38291*width, y: 0.26541*height), control2: CGPoint(x: 0.52311*width, y: 0.16019*height))
+        path.addCurve(to: CGPoint(x: 0.46911*width, y: 0.48119*height), control1: CGPoint(x: 0.76316*width, y: 0.25575*height), control2: CGPoint(x: 0.58169*width, y: 0.30125*height))
+        return path
     }
     
     func yOf(_ x: CGFloat, help: GridInfo) -> CGFloat {

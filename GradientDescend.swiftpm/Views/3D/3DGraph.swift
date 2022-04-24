@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  3DGraph.swift
 //  
 //
 //  Created by Ryan D on 4/17/22.
@@ -26,7 +26,7 @@ struct Simple3DView: View, Equatable {
                 self.scene.ballDropped()
             }
     }
-        
+    
     
 }
 
@@ -39,7 +39,7 @@ class Simple3DScene: SCNScene {
         background.contents = UIColor.black
         
         
-//      MARK: Grid
+        //      MARK: Grid
         let stepSize = 1.0
         let xAxisTotal = 10
         let yAxisTotal = 10
@@ -68,8 +68,6 @@ class Simple3DScene: SCNScene {
         modelGraph.physicsBody = modelGraphPhysicsBody
         
         rootNode.addChildNode(modelGraph)
-                
-//        self.physicsWorld.gr
         
     }
     
@@ -121,8 +119,8 @@ class Simple3DScene: SCNScene {
             node.position = SCNVector3(x: Float(CGFloat(xAxisTotal) * scale) / 2, y: Float(CGFloat(y) * scale) - Float(CGFloat(yAxisTotal) * scale) / 2, z: 0.0)
             mainNode.addChildNode(node)
         }
-
-
+        
+        
         //YZ
         for z in 0...zAxisTotal {
             let node = SCNNode(geometry: SCNCylinder(radius: 0.02, height: CGFloat(yAxisTotal) * scale))
@@ -155,7 +153,6 @@ class Simple3DScene: SCNScene {
     }
     
     func ballDropped() {
-        //TODO: do stuff here
         guard let modelPosition = modelPosition else {
             return
         }

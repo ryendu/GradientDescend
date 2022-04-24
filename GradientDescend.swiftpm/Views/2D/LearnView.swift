@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  LearnView.swift
 //  GradientDescend
 //
 //  Created by Ryan D on 4/5/22.
@@ -14,10 +14,7 @@ struct Learn2DGDView: View {
     @Binding var zoomedOut: Bool
     @Binding var selectedView: MainView
     var body: some View {
-//        InteractiveWindow(slide: $slide) {
-            MoreComplex2DGDSlide(slide: $slide, zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-//            Text("")
-//        }
+        MoreComplex2DGDSlide(slide: $slide, zoomedOut: self.$zoomedOut, selectedView: $selectedView)
     }
 }
 
