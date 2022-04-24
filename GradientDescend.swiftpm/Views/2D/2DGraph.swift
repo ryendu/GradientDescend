@@ -79,7 +79,6 @@ struct SimpleInteractiveGraph2DView: View {
             
             //            path.addArc(center: CGPoint(x: xNext, y: yOf(xNext, help: help)), radius: stepSize * help.xScale, startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 180), clockwise: true)
             //            path.addLine(to: CGPoint(x: xNext, y: yOf(xNext, help: help)))
-            print("s \(xStart), c \(xNext), i \(i)")
             
         }
         
@@ -108,7 +107,6 @@ struct SimpleInteractiveGraph2DView: View {
         
         let y = y_1 + y_2 + y_3 * y_4
         
-        print("y: \(y)")
         return y
     }
 }
@@ -320,7 +318,6 @@ struct ComplexInteractiveGraph2DView: View {
         
         let y = y_1 + y_2 + y_3 * y_4
         
-        print("y: \(y)")
         return y
     }
 }
@@ -360,8 +357,6 @@ struct Grid<Content:View>: View {
                     let xStepLength = (geo.size.width) / CGFloat(config.xTotal)
                     let yStepLength = (geo.size.height) / CGFloat(config.yTotal)
                     
-                    print(xStepLength)
-                    print(yStepLength)
                     // x guide lines
                     for i in 0...config.xTotal {
                         path.move(to: CGPoint(x: CGFloat(0.0), y: geo.size.height - (yStepLength * CGFloat(i))))
@@ -428,7 +423,6 @@ struct Grid<Content:View>: View {
                 
             }
             .onAppear {
-                print("GRID SIZE: \(geo.size)")
             }
         }
         .padding()

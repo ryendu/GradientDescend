@@ -139,7 +139,6 @@ struct OnboardingView: View {
             Text("")
                 .onAppear(perform: {
                     self.geo = geo
-                    print(geo.size)
                 })
         })
         .overlay(
@@ -166,7 +165,7 @@ struct OnboardingView: View {
         )
         .onTapGesture {
             if self.animateGridY {
-                
+
                 withAnimation(.spring()) {
                     for _ in 0...200 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.2...2)) {
@@ -175,25 +174,25 @@ struct OnboardingView: View {
                     }
                 }
                 //            expand a big gradient and then cool off into white and next slide!
-                
-                
+
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                     self.expandOverlay = true
                 }
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     self.bubbles = []
                     self.hideContent = true
                     self.reshrinkOverlay = true
                     self.expandOverlay = false
                 }
-                
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                         self.finishedOnboarding = true
-                        
+
                     }
             }
-            
+
         }
         .onAppear {
             withAnimation() {

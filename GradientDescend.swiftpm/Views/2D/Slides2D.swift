@@ -86,7 +86,6 @@ struct Basic2DGradientDescentSlide: View {
                                     Slider(value: $xValue, in: 0...10, onEditingChanged: { editing in
                                         if round(xValue) == 5.0 {
                                             self.counter += 1
-                                            print("REWARD!!!!!!!")
                                             self.cardIndex += 1
                                         }
                                     }).padding()
@@ -119,7 +118,7 @@ struct Basic2DGradientDescentSlide: View {
                                     
                                     
                                     Group {
-                                        Text("Now you should have a basic understanding of how gradient descent works! Lets move on to the next section.").font(textFont)
+                                        Text("Now you should have a basic understanding of how gradient descent works! Let's move on to the next section.").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 6 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
@@ -261,11 +260,10 @@ struct MoreComplex2DGDSlide: View {
                             ScrollViewReader { value in
                                 VStack(alignment: .leading) {
                                     
-                                    
                                     // at the same time card index 1, show the graph
                                     Group {
                                         Text("""
-                                            Now lets look at a more complex example of gradient descent.
+                                            Now let's look at a more complex example of gradient descent.
                                             
                                             Here, we have a model with two
                                             """).font(textFont) + Text(" local minima").font(boldedTextFont) + Text(" (canyons), lets run gradient descent and observe what happens. ").font(textFont) + Text(" (click next)").font(boldedTextFont)
@@ -340,7 +338,7 @@ struct MoreComplex2DGDSlide: View {
                                              As you can see, higher learning rate can let the model explore more of the feature space but risks skipping over the minimum possible.
                                              
                                              
-                                             """).font(textFont) + Text("You finished this module on learning rates!").font(boldedTextFont) + Text(" Lets move onto some even funner examples!").font(textFont)
+                                             """).font(textFont) + Text("You finished this module on learning rates!").font(boldedTextFont) + Text(" Let's move onto some examples that are even more fun!").font(textFont)
                                         
                                     }.padding()
                                         .opacity(cardIndex > 3  ? 1 : 0)

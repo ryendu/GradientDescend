@@ -60,7 +60,7 @@ struct TabView: View {
                             .background(Circle().fill(LinearGradient(colors: [Color("neutral200"),Color("neutral400")], startPoint: .topLeading, endPoint: .bottomTrailing)))
                         
                     })
-                }.zIndex(2).offset(x: (geo?.size.width ?? 500) / 2 - 70, y: (geo?.size.height ?? 500) / 2 - 70)
+                }.zIndex(2).offset(x: (geo?.size.width ?? 1000) / 2 - 70, y: (geo?.size.height ?? 1000) / 2 - 70)
                 
                 
                   
@@ -79,10 +79,9 @@ struct TabView: View {
                 Text("")
                     .onAppear(perform: {
                         self.geo = geo
-                        print(geo.size)
                     })
             })
-            
+           
     }
 }
 

@@ -8,23 +8,32 @@
 import SwiftUI
 import AVFoundation
 
+
+/*
+ Hey There! 👋
+
+ I'm Ryan, welcome to my swift playground app, GradientDescend,
+ where we will descend into how Gradient Descent work!
+ 
+ **GradientDescend** is best experienced full screen in landscape.
+ The build process might take a moment so hold tight enjoy!
+ 
+*/
+
+
+
+
 struct ContentView: View {
-    @State var skipOnboarding = true
     @State var finishedOnboarding = false
     @State var player: AVAudioPlayer? = nil
     var body: some View {
         ZStack{
-            if !self.skipOnboarding || self.finishedOnboarding{
+            if self.finishedOnboarding{
                 TabView()
             } else {
                 OnboardingView(finishedOnboarding: self.$finishedOnboarding)
             }
         }.onAppear(perform: {
-            self.skipOnboarding = UserDefaults.standard.bool(forKey: "skipOnboarding")
-            UserDefaults.standard.set(true, forKey: "skipOnboarding")
-//            FontBlaster.blast()
-//            print(FontBlaster.loadedFonts)
-            
             //play intro
             let url = Bundle.main.url(forResource: "intro", withExtension: "m4a")
             player = try! AVAudioPlayer(contentsOf: url!)

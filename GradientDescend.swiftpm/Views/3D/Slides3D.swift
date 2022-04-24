@@ -55,14 +55,14 @@ struct Simple3DGDSlide: View {
                                     
                                     // at the same time card index 1, show the graph
                                     Group {
-                                        Text("Now lets take a look at an example of a neural network with ").font(textFont).foregroundColor(.white) + Text("two parameters").font(boldedTextFont).foregroundColor(.white) + Text(". This takes us to the third dimension!").font(textFont).foregroundColor(.white)
+                                        Text("Now let's take a look at an example of a neural network with ").font(textFont).foregroundColor(.white) + Text("two parameters").font(boldedTextFont).foregroundColor(.white) + Text(". This takes us to the third dimension!").font(textFont).foregroundColor(.white)
                                     }.padding()
                                         .opacity(cardIndex > 0 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(0)
                                     
                                     Group {
-                                        Text("To simulate gradient descent, lets drop a ball and let it minimize the error of this model. Pan around to get a good view of the model, then click drop.").font(textFont).foregroundColor(.white)
+                                        Text("To simulate gradient descent, let's drop a ball and let it minimize the error of this model. Pan around to get a good view of the model, then click drop.").font(textFont).foregroundColor(.white)
                                         
                                         Button(action: {
                                             self.dropBall.toggle()

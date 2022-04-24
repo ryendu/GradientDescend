@@ -159,7 +159,6 @@ class Simple3DScene: SCNScene {
         guard let modelPosition = modelPosition else {
             return
         }
-        print("UPDATED")
         let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
         var ballPosition = modelPosition
         ballPosition.y = ballPosition.y + 10
