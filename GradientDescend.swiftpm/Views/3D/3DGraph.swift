@@ -9,31 +9,21 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-//            .previewLayout(.fixed(width: 812, height: 375)) // 1
-            .environment(\.horizontalSizeClass, .compact) // 2
-            .environment(\.verticalSizeClass, .compact)
-            .previewInterfaceOrientation(.landscapeLeft) // 3
-    }
-}
-
 
 struct Simple3DView: View, Equatable {
     static func == (lhs: Simple3DView, rhs: Simple3DView) -> Bool {
         return true
     }
     
-    @Binding var cardIndex: Int
+    @Binding var dropBall: Bool
     
     
     @State var scene = Simple3DScene(make: true)
     var body: some View {
         SceneView(scene: scene, options: [.autoenablesDefaultLighting, .allowsCameraControl])
             .ignoresSafeArea()
-            .onChange(of: self.cardIndex) { i in
-                self.scene.cardIndexUpdated(cardIndex: self.cardIndex)
+            .onChange(of: self.dropBall) { i in
+                self.scene.ballDropped()
             }
     }
         
@@ -42,15 +32,12 @@ struct Simple3DView: View, Equatable {
 
 class Simple3DScene: SCNScene {
     var modelPosition: SCNVector3? = nil
+    
     convenience init(make:Bool){
         self.init()
         
         background.contents = UIColor.black
         
-//      MARK: Testing
-//        let sphere = SCNNode(geometry: SCNSphere(radius: 20))
-//        sphere.position = SCNVector3(x: 0, y: 0, z: 0)
-//        rootNode.addChildNode(sphere)
         
 //      MARK: Grid
         let stepSize = 1.0
@@ -59,7 +46,7 @@ class Simple3DScene: SCNScene {
         let zAxisTotal = 10
         let scale: CGFloat = 3.0
         
-        let grid = createGrid(stepSize: stepSize, xAxisTotal: xAxisTotal, yAxisTotal: yAxisTotal, zAxisTotal: zAxisTotal, xLabel: "Param 1", yLabel: "Error", zLabel: "Param 2", scale: scale)
+        let grid = createGrid(stepSize: stepSize, xAxisTotal: xAxisTotal, yAxisTotal: yAxisTotal, zAxisTotal: zAxisTotal, xLabel: "Param 1", yLabel: "Error Rate", zLabel: "Param 2", scale: scale)
         grid.position = SCNVector3(x: 0, y: 0, z: 0)
         rootNode.addChildNode(grid)
         
@@ -81,7 +68,7 @@ class Simple3DScene: SCNScene {
         modelGraph.physicsBody = modelGraphPhysicsBody
         
         rootNode.addChildNode(modelGraph)
-        
+                
 //        self.physicsWorld.gr
         
     }
@@ -107,6 +94,21 @@ class Simple3DScene: SCNScene {
         zAxis.position = SCNVector3(x: Float(CGFloat(xAxisTotal) * scale) / 2, y: -1 * Float(CGFloat(yAxisTotal) * scale / 2), z: 0.0)
         zAxis.rotation = SCNVector4(0, 0, 1, 1.5708)
         mainNode.addChildNode(zAxis)
+        
+        // labels
+        let textMaterial = SCNMaterial()
+        textMaterial.diffuse.contents = UIColor.white
+        // y
+        let yLabelText = SCNText(string: "Error Rate", extrusionDepth: 2)
+        yLabelText.materials = [textMaterial]
+        
+        let yLabel = SCNNode(geometry: yLabelText)
+        yLabel.scale = SCNVector3(x: 0.1, y: 0.1, z: 0.1)
+        yLabel.position = SCNVector3(x: -0.3, y: 0, z: 0)
+        yLabel.rotation = SCNVector4(0, 0, 1, -1.5708)
+        rootNode.addChildNode(yLabel)
+        
+        
         //XY
         for x in 0...xAxisTotal {
             let node = SCNNode(geometry: SCNCylinder(radius: 0.02, height: CGFloat(yAxisTotal) * scale))
@@ -152,24 +154,27 @@ class Simple3DScene: SCNScene {
         return mainNode
     }
     
-    func cardIndexUpdated(cardIndex: Int) {
+    func ballDropped() {
         //TODO: do stuff here
         guard let modelPosition = modelPosition else {
             return
         }
-        if cardIndex > 1 {
-            print("UPDATED")
-            let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
-            var ballPosition = modelPosition
-            ballPosition.y = ballPosition.y + 4
-            ball.position = ballPosition
-            
-            let ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 0.5)))
-            ballPhysicsBody.isAffectedByGravity = true
-            
-            ball.physicsBody = ballPhysicsBody
-            self.rootNode.addChildNode(ball)
-        }
+        print("UPDATED")
+        let ball = SCNNode(geometry: SCNSphere(radius: 0.5))
+        var ballPosition = modelPosition
+        ballPosition.y = ballPosition.y + 10
+        ball.position = ballPosition
+        
+        let wwdcMaterialGurl = SCNMaterial()
+        wwdcMaterialGurl.isDoubleSided = false
+        wwdcMaterialGurl.diffuse.contents = UIImage(named: "wwdc")
+        
+        ball.geometry?.materials = [wwdcMaterialGurl]
+        let ballPhysicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: SCNSphere(radius: 0.5)))
+        ballPhysicsBody.isAffectedByGravity = true
+        
+        ball.physicsBody = ballPhysicsBody
+        self.rootNode.addChildNode(ball)
         
     }
 }

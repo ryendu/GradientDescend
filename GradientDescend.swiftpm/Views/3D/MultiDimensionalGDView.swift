@@ -14,12 +14,6 @@ struct Learn3DGDViewGDView: View {
     @Binding var zoomedOut: Bool
     @Binding var selectedView: MainView
     var body: some View {
-        InteractiveWindow(slide: $slide) {
-            
             Simple3DGDSlide(slide: $slide)
-            
-            Simple3DGDSlide(slide: $slide)
-            
-        }
     }
 }

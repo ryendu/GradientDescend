@@ -33,15 +33,15 @@ struct TabView: View {
                 
                 
                 Learn3DGDViewGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "3. Gradient Descent Like Gravity", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
+                    .displayContainerHelper(moduleName: "3. 3D Gradient Descent", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 Basic2DView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "2. What Is Gradient Descent?", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .basic2dView, geo: $geo)
+                    .displayContainerHelper(moduleName: "1. How Does Gradient Descent Work", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .basic2dView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 Learn2DGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "1. Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
+                    .displayContainerHelper(moduleName: "2. Learning Rates & Local Minima", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 
@@ -61,6 +61,8 @@ struct TabView: View {
                         
                     })
                 }.zIndex(2).offset(x: (geo?.size.width ?? 500) / 2 - 70, y: (geo?.size.height ?? 500) / 2 - 70)
+                
+                
                   
                 
             }.ignoresSafeArea(edges: .top)

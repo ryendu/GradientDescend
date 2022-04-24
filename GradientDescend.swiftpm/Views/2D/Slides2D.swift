@@ -62,7 +62,7 @@ struct Basic2DGradientDescentSlide: View {
                                     
                                     // at the same time card index 1, show the graph
                                     Group {
-                                        Text("Say we have a model with just ").font(textFont) + Text("one adjustable parameter. ").font(boldedTextFont) + Text("The graph on the right is the graph of its ").font(textFont) + Text("cost function").font(boldedTextFont) + Text(", where the ").font(textFont) + Text("X").font(boldedTextFont) + Text(" axis represents the value of that one adjustable parameter and the ").font(textFont) + Text("Y").font(boldedTextFont) + Text(" axis represents the corresponding error produced by the model with parameter ").font(textFont) + Text("X").font(boldedTextFont) + Text(".").font(textFont)
+                                        Text("The graph on the right plots a neural network's parameters on the ").font(textFont) + Text("x axis").font(boldedTextFont) + Text(", and the corresponding error given by those parameters on the ").font(textFont) + Text("y axis.").font(boldedTextFont)
                                     }.padding()
                                         .opacity(cardIndex > 0 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
@@ -70,14 +70,14 @@ struct Basic2DGradientDescentSlide: View {
                                     
                                     //when its card index 2, wait 2 seconds and have the animation of the steps
                                     Group {
-                                        Text("The model is initialized with an ").font(textFont) + Text("arbitrary starting point").font(boldedTextFont) + Text(" and the Gradient Descent algorithm adjusts the model to decrease the error as much as possible.").font(textFont)
+                                        Text("The model is initialized at an ").font(textFont) + Text("arbitrary point").font(boldedTextFont) + Text(" and the Gradient Descent algorithm adjusts the model to minimize the error as much as possible.").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 1  ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(1)
                                     
                                     Group {
-                                        Text("You try first! Adjust the slider below to get the model to have the lowest error rate").font(textFont)
+                                        Text("You try first! Adjust the slider below to get the model to have the lowest error.").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 2  ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
@@ -103,26 +103,23 @@ struct Basic2DGradientDescentSlide: View {
                                     
                                     
                                     Group {
-                                        Text("Similar to what you did, gradient descent calculates the ").font(textFont) + Text("derivative").font(boldedTextFont) + Text(" (or slope) of the current point and adjusts the Weights and Biases of the model to take steps in the direction with the ").font(textFont) + Text("steepest downward slope").font(boldedTextFont) + Text(" until it reduces the cost function to the minimum possible (though you probably didn't do calculus in your head). ").font(textFont)
+                                        Text("Gradient descent calculates the ").font(textFont) + Text("derivative").font(boldedTextFont) + Text(" (or slope) of the current point and adjusts the model towards the ").font(textFont) + Text("steepest downward slope").font(boldedTextFont) + Text(" until it reaches the smallest error possible.").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 4 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(5)
                                     
-                                    
                                     Group {
-                                        Text("To put it in other words, ").font(textFont)
-                                        
-                                        Text("Given an arbitrary starting point, the gradient descent algorithm will take steps in the direction of the steepest slope until it reaches the bottom. Click Next to see this in action!").font(textFont)
+                                        Text("This is ").font(textFont) + Text("gradient descent").font(boldedTextFont) + Text(" in action! ").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 5 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(6)
                                     
+                                    
+                                    
                                     Group {
-                                        
-                                        //TODO: Seperate the below into two blocks of text
-                                        Text("As you can see, as gradient descent gets closer and closer to the minimum, it takes smaller and smaller steps until it has reached the convergence point (lowest point). Now you should have a basic understanding of how gradient descent works! Click next to move on to the next section.").font(textFont)
+                                        Text("Now you should have a basic understanding of how gradient descent works! Lets move on to the next section.").font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 6 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
@@ -130,19 +127,18 @@ struct Basic2DGradientDescentSlide: View {
                                     
                                     Spacer()
                                     
-                                    
                                 }
                                 
                                 .onChange(of: self.cardIndex) { _ in
                                     withAnimation(.easeInOut) {
-                                        value.scrollTo(self.cardIndex, anchor: .center)
+                                        value.scrollTo(self.cardIndex - 1, anchor: .top)
                                     }
                                 }
                                 
                             }
                         }
                         
-                        if cardIndex <= 7 && cardIndex != 3 {
+                        if cardIndex <= 6 && cardIndex != 3 {
                             Button(action: {
                                 self.cardIndex += 1
                             }, label: {
@@ -156,7 +152,7 @@ struct Basic2DGradientDescentSlide: View {
                                     .animation(.easeInOut(duration: 1), value: self.time)
                             })
                         }
-                        if self.cardIndex >= 8 {
+                        if self.cardIndex >= 7 {
                             Button(action: {
                                 withAnimation(.spring()) {
                                     self.zoomedOut = true
@@ -256,7 +252,7 @@ struct MoreComplex2DGDSlide: View {
                 HStack {
                     // explanation
                     VStack(alignment: .leading) {
-                        Text("How does Gradient Descent Work?")
+                        Text("Learning Rates and Local Minima")
                             .font(.largeTitle)
                             .bold()
                             .padding()
@@ -272,7 +268,7 @@ struct MoreComplex2DGDSlide: View {
                                             Now lets look at a more complex example of gradient descent.
                                             
                                             Here, we have a model with two
-                                            """).font(textFont) + Text("local minima").font(boldedTextFont) + Text(" (lowest points), lets run gradient descent just as we did in the pervioius example and observe what happens. ").font(textFont) + Text(" (click next)").font(boldedTextFont)
+                                            """).font(textFont) + Text(" local minima").font(boldedTextFont) + Text(" (canyons), lets run gradient descent and observe what happens. ").font(textFont) + Text(" (click next)").font(boldedTextFont)
                                     }.padding()
                                         .opacity(cardIndex > 0 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
@@ -280,9 +276,11 @@ struct MoreComplex2DGDSlide: View {
                                     
                                     //when its card index 2, wait 2 seconds and have the animation of the steps
                                     Group {
-                                        Text("Did you notice how gradient descent didn't minimize the cost function to the max? This is because it got stuck in a ").font(textFont) + Text("local minima.").font(boldedTextFont) + Text("""
-                                                                                                                                                                                                                            
-                                        Since gradient descent calculates the derivative of its current position, it'll naturally go towards the downward direction like a ball rolling down a hill. Because of this, the model will get stuck in a local minima during training.
+                                        Text("Did you notice how gradient descent didn't fully reduce the error?").font(textFont) + Text("""
+                                                                                                                                                                                        
+                                        
+                                        
+                                        Gradient descent is like a ball rolling down a hill, it wont be able to climb out of a local minima.
                                         """).font(textFont)
                                     }.padding()
                                         .opacity(cardIndex > 1  ? 1 : 0)
@@ -291,7 +289,8 @@ struct MoreComplex2DGDSlide: View {
                                     
                                     Group {
                                         Text("""
-                                        To resolve this problem, we can adjust the learning rate, a number multiplied to the negative derivateve of the current point which changes the magnitude of each step. A higher learning rate can let the model explore more of the feature space but risks skipping over the global minima (minimum possible cost function).
+                                        To resolve this problem, we can adjust the learning rate, a number that controls the magnitude of each step.
+                                        
                                         
                                         Adjust the slider below and experiment with different learning rates.
                                         """).font(textFont)
@@ -302,18 +301,7 @@ struct MoreComplex2DGDSlide: View {
                                         .id(2)
                                     
                                     Group {
-                                        Group {
-                                            HStack{
-                                                Spacer()
-                                                ForEach(0...4, id: \.self) { i in
-                                                    Spacer()
-                                                    Rectangle().size(width: 2, height: 10)
-                                                        .fill()
-                                                        .foregroundColor(Color("neutral400"))
-//                                                    Spacer()
-                                                }
-                                            }
-                                        }
+                                        
                                     Slider(value: $learningRateIndx, in: 1.0...5.0, onEditingChanged: { editing in
                                         // todo [0.001,0.005,0.01,0.10,0.1]
                                         // default is 0.005
@@ -347,10 +335,15 @@ struct MoreComplex2DGDSlide: View {
                                         .id(2)
                                     
                                     Group {
-                                        Text("You've finished this module! You did it, you learned about what gradient descent is and you know how it works! Now lets dive into some more fun examples!").font(textFont)
+                                        Text("""
+                                                                                    
+                                             As you can see, higher learning rate can let the model explore more of the feature space but risks skipping over the minimum possible.
+                                             
+                                             
+                                             """).font(textFont) + Text("You finished this module on learning rates!").font(boldedTextFont) + Text(" Lets move onto some even funner examples!").font(textFont)
                                         
                                     }.padding()
-                                        .opacity(cardIndex > 2  ? 1 : 0)
+                                        .opacity(cardIndex > 3  ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(3)
                                     
@@ -362,12 +355,12 @@ struct MoreComplex2DGDSlide: View {
                                 
                                 .onChange(of: self.cardIndex) { _ in
                                     withAnimation(.easeInOut) {
-                                        value.scrollTo(self.cardIndex - 1, anchor: .center)
+                                        value.scrollTo(self.cardIndex - 1, anchor: .top)
                                     }
                                 }
                             }
                         }
-                        if cardIndex <= 2 {
+                        if cardIndex <= 3 {
                             Button(action: {
                                 if self.cardIndex < 4 {
                                     self.cardIndex += 1
@@ -385,7 +378,7 @@ struct MoreComplex2DGDSlide: View {
                                     .animation(.easeInOut(duration: 1), value: self.time)
                             })
                         }
-                        if self.cardIndex > 2 {
+                        if self.cardIndex > 3 {
                             Button(action: {
                                 withAnimation(.spring()) {
                                     self.zoomedOut = true

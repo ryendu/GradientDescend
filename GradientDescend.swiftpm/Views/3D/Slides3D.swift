@@ -7,9 +7,6 @@
 
 import Foundation
 import SwiftUI
-//import IrregularGradient
-//import ConfettiSwiftUI
-
 
 
 struct Simple3DGDSlide: View {
@@ -34,6 +31,8 @@ struct Simple3DGDSlide: View {
     
     @State var counter = 0
     
+    @State var dropBall = false
+    
     
     var body: some View {
         
@@ -43,7 +42,7 @@ struct Simple3DGDSlide: View {
                 HStack {
                     // explanation
                     VStack(alignment: .leading) {
-                        Text("Gradient Descent on Another Dimension")
+                        Text("3D Gradient Descent")
                             .font(.largeTitle)
                             .bold()
                             .padding()
@@ -56,21 +55,46 @@ struct Simple3DGDSlide: View {
                                     
                                     // at the same time card index 1, show the graph
                                     Group {
-                                        Text("Realistically, neural networks would have ").font(textFont).foregroundColor(.white) + Text("Millions to Billions").font(boldedTextFont).foregroundColor(.white) + Text(" of parameters, as each parameter adds another dimension. We can't percieve anything more than 3 dimensions, but to show how more complex gradient descent algorithms work, lets go to the third dimension.").font(textFont).foregroundColor(.white)
+                                        Text("Now lets take a look at an example of a neural network with ").font(textFont).foregroundColor(.white) + Text("two parameters").font(boldedTextFont).foregroundColor(.white) + Text(". This takes us to the third dimension!").font(textFont).foregroundColor(.white)
                                     }.padding()
                                         .opacity(cardIndex > 0 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
                                         .id(0)
                                     
                                     Group {
-                                        Text("Yo wasn't that cool? Try panning around the 3d model!").font(textFont).foregroundColor(.white)
+                                        Text("To simulate gradient descent, lets drop a ball and let it minimize the error of this model. Pan around to get a good view of the model, then click drop.").font(textFont).foregroundColor(.white)
+                                        
+                                        Button(action: {
+                                            self.dropBall.toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                self.cardIndex += 1
+                                            }
+                                        }, label: {
+                                            Text("Drop Ball")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 24)
+                                                        .fill(Color("bg4"))
+                                                )
+                                        })
                                     }.padding()
                                         .opacity(cardIndex > 1 ? 1 : 0)
                                         .animation(.spring(), value: self.cardIndex)
+                                        .id(1)
+                                    
+                                    
+                                    
+                                    Group {
+                                        Text("Congratulations!").font(boldedTextFont).foregroundColor(Color("bg4")) + Text("""
+                                        You've completed this playground app! Thank you for your time and I hope you have a great WWDC2022!
+                                        
+                                        If you'd like, you can go back to the previous modules with the button on the bottom right.
+                                        """).font(textFont).foregroundColor(.white)
+                                    }.padding()
+                                        .opacity(cardIndex > 2 ? 1 : 0)
+                                        .animation(.spring(), value: self.cardIndex)
                                         .id(2)
-                                    
-                                    //id 3 goes to the about page which acts as conslusion!
-                                    
                                     
                                     Spacer()
                                     
@@ -78,15 +102,18 @@ struct Simple3DGDSlide: View {
                                 }
                                 
                                 .onChange(of: self.cardIndex) { _ in
+                                    if self.cardIndex == 3 {
+                                        self.counter += 1
+                                    }
                                     withAnimation(.easeInOut) {
-                                        value.scrollTo(self.cardIndex, anchor: .center)
+                                        value.scrollTo(self.cardIndex - 1, anchor: .top)
                                     }
                                 }
                                 
                             }
                         }
                         
-                        if self.cardIndex != 3 {
+                        if self.cardIndex < 3 && self.cardIndex != 2 {
                             Button(action: {
                                 if self.cardIndex < 7 {
                                     self.cardIndex += 1
@@ -109,7 +136,7 @@ struct Simple3DGDSlide: View {
                     // intearctive stuff !!!
                     HStack {
                         
-                        Simple3DView(cardIndex: $cardIndex)
+                        Simple3DView(dropBall: $dropBall)
                             .id("grid")
 //                            .opacity(self.hideOverlayLine ? 1 : 0)
 //                            .animation(.default, value: self.hideOverlayLine)

@@ -14,7 +14,7 @@ struct SimpleInteractiveGraph2DView: View {
     @Binding var xValue: Double
     var body: some View {
         ZStack {
-            Grid(cardIndex: $cardIndex, config: GridConfig(xStepSize: 1, yStepSize: 1, xTotal: 10, yTotal: 10, yLabel: "Cost Function", xLabel: "Model Parameter"), content: { help in
+            Grid(cardIndex: $cardIndex, config: GridConfig(xStepSize: 1, yStepSize: 1, xTotal: 10, yTotal: 10, yLabel: "Error", xLabel: "Model Parameter"), content: { help in
                 ZStack {
                     Path { path in
                         //graphing x^2
@@ -32,7 +32,7 @@ struct SimpleInteractiveGraph2DView: View {
                         .animation(.easeIn(duration: 2), value: self.cardIndex)
                     
                     getStepPath(help: help)
-                        .trim(from: 0, to: self.cardIndex > 6 ? 1 : 0)
+                        .trim(from: 0, to: self.cardIndex > 5 ? 1 : 0)
                         .stroke(.purple, lineWidth: 3)
                         .animation(.easeIn(duration: 3), value: self.cardIndex)
                     
