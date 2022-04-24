@@ -7,8 +7,8 @@
 
 import Foundation
 import SwiftUI
-import IrregularGradient
-import ConfettiSwiftUI
+//import IrregularGradient
+//import ConfettiSwiftUI
 
 struct CircleToLine: Shape {
     
@@ -57,6 +57,7 @@ struct Basic2DGradientDescentSlide: View {
     let textFont = Font
         .system(size: 20)
         .monospaced()
+    
     let boldedTextFont = Font
         .system(size: 20)
         .bold()

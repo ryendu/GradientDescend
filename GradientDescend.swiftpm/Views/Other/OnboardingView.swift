@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+//import IrregularGradient
 
 struct OnboardingView: View {
     
@@ -20,8 +21,13 @@ struct OnboardingView: View {
     @State var reshrinkOverlay = false
     @State var hideContent = false
     
+    @State var animateOnScreen = false
+    
+    @State var animateGridX = false
+    @State var animateGridY = false
     var body: some View {
         ZStack{
+            //white background
             VStack{
                 Spacer()
                 HStack {
@@ -31,6 +37,7 @@ struct OnboardingView: View {
                 }
                 Spacer()
             }
+            //bubbles
             Group {
                 if self.bubbles.count > 0 {
                     ForEach(self.bubbles, id:\.self) {bub in
@@ -45,16 +52,84 @@ struct OnboardingView: View {
                 }
             }
             
-            VStack {
-                Text("Gradient")
-                    .font(.custom("Montserrat-Bold", size: 50))
-                    .padding(.trailing, 80)
-                Text("Descent")
-                    .font(.custom("Montserrat-Bold", size: 50))
-                    .padding(.leading, 80)
-                Text("Click anywhere to descend into the gradient")
-                    .font(.callout)
+            Path { path in
+                guard let geo = geo else { return }
+                let stepLength = (geo.size.width) / 12
+                let yTotal = Int(round(geo.size.width / stepLength))
+               
                 
+                // y guide lines
+                for i in 0...yTotal {
+                    path.move(to: CGPoint(x: stepLength * CGFloat(i), y: CGFloat(0.0)))
+                    path.addLine(to: CGPoint(x: stepLength * CGFloat(i), y: geo.size.height))
+                    
+                }
+            }
+            .trim(from: 0, to: self.animateGridY ? 1 : 0)
+            .stroke(Color("neutral400"), lineWidth: 1)
+            .animation(.easeInOut(duration: 4), value: self.animateGridY)
+            
+            Path { path in
+                guard let geo = geo else { return }
+                let stepLength = (geo.size.width) / 12
+                let xTotal = Int(round(geo.size.height / stepLength))
+                
+                // x guide lines
+                for i in 0...xTotal {
+                    path.move(to: CGPoint(x: CGFloat(0.0), y: geo.size.height - (stepLength * CGFloat(i))))
+                    path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height - (stepLength * CGFloat(i))))
+                }
+            }
+            .trim(from: 0, to: self.animateGridX ? 1 : 0)
+            .stroke(Color("neutral400"), lineWidth: 1)
+            .animation(.easeOut(duration: 4), value: self.animateGridX)
+           
+            
+            //content
+            VStack {
+                    VStack {
+                        Spacer()
+                        VStack {
+                            
+                            
+                        Text("Gradient")
+                                .font(.system(size: 80).bold().monospaced())
+                            
+                            .offset(x: self.animateOnScreen ? 0 : 300)
+                            .opacity(self.animateOnScreen ? 1 : 0)
+                            .animation(.easeInOut(duration: 1), value: self.animateOnScreen)
+                            .irregularGradient(colors: [Color("gd1-1"), Color("gd1-2"), Color("gd1-3"), Color("gd1-4"), Color("gd1-5")], backgroundColor: .white, speed: 2)
+                        
+                        Text("Descent")
+                                .font(.system(size: 80).bold().monospaced())
+                            
+                                .bold()
+                                .offset(x: self.animateOnScreen ? 0 : 300)
+                                .opacity(self.animateOnScreen ? 1 : 0)
+                                .animation(.easeInOut(duration: 1), value: self.animateOnScreen)
+                                .irregularGradient(colors: [Color("gd1-1"), Color("gd1-2"), Color("gd1-3"), Color("gd1-4"), Color("gd1-5")], backgroundColor: .white, speed: 2)
+                        }
+                        
+                        
+                        Text("(An algorithm for training and optimizing neural networks)")
+                            .font(.system(size: 18).monospaced())
+                            
+                            .offset(x: self.animateOnScreen ? 0 : -300)
+                            .opacity(self.animateOnScreen ? 1 : 0)
+                            .animation(.easeInOut(duration: 1), value: self.animateOnScreen)
+                            .padding(.top, 3)
+                        
+                        Spacer()
+                    }
+                    Spacer()
+                
+                Text("Tap Anywhere to Start")
+                    .font(.system(size: 25).monospaced())
+                    .offset(y: self.animateOnScreen ? 0 : -30)
+                    .animation(.spring(), value: self.animateOnScreen)
+                    .padding()
+                    .padding()
+                Spacer()
             }
             if self.hideContent {
                 Color.white
@@ -107,7 +182,19 @@ struct OnboardingView: View {
             
         }
         .onAppear {
-            
+            withAnimation() {
+                self.animateOnScreen = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                withAnimation() {
+                    self.animateGridX = true
+                }
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
+                withAnimation() {
+                    self.animateGridY = true
+                }
+            })
         }
     }
     func randomRainbowColor() -> Color {
@@ -123,7 +210,7 @@ struct OnboardingView: View {
             dampingFraction: 0.5,
             blendDuration: 0.9
         )) {
-            self.bubbles.append(Bubble(offsetX: randomOffset(), offsetY: randomOffset(), color1: randomRainbowColor(), color2: randomRainbowColor(),x:60*Double.random(in: 2...4),y:60*Double.random(in: 2...4)))
+            self.bubbles.append(Bubble(offsetX: randomOffset(), offsetY: randomOffset(), color1: randomRainbowColor(), color2: randomRainbowColor(),x:80*Double.random(in: 2...5),y:80*Double.random(in: 2...5)))
         }
     }
 }

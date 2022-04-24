@@ -7,8 +7,8 @@
 
 import Foundation
 import SwiftUI
-import IrregularGradient
-import ConfettiSwiftUI
+//import IrregularGradient
+//import ConfettiSwiftUI
 
 
 

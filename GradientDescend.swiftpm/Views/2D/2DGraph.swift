@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import IrregularGradient
+//import IrregularGradient
 
 struct SimpleInteractiveGraph2DView: View {
     @Binding var cardIndex: Int
@@ -365,7 +365,7 @@ struct Grid<Content:View>: View {
                     // x guide lines
                     for i in 0...config.xTotal {
                         path.move(to: CGPoint(x: CGFloat(0.0), y: geo.size.height - (yStepLength * CGFloat(i))))
-                        path.addLine(to: CGPoint(x: geo.size.height, y: geo.size.height - (yStepLength * CGFloat(i))))
+                        path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height - (yStepLength * CGFloat(i))))
                     }
                     
                     // y guide lines

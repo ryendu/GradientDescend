@@ -7,15 +7,14 @@
 
 import Foundation
 import SwiftUI
+import AVFoundation
 
 struct Basic2DView: View {
     @Binding var geo: GeometryProxy?
     @Binding var zoomedOut: Bool
     @Binding var selectedView: MainView
+    
     var body: some View {
-//        InteractiveWindow(slide: $slide) {
-            Basic2DGradientDescentSlide(zoomedOut: $zoomedOut, selectedView: $selectedView)
-//            Text("")
-//        }
+        Basic2DGradientDescentSlide(zoomedOut: $zoomedOut, selectedView: $selectedView)
     }
 }

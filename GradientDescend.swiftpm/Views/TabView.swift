@@ -7,8 +7,7 @@
 
 import Foundation
 import SwiftUI
-import IrregularGradient
-import Neumorphic
+//import IrregularGradient
 import CoreMotion
 
 
@@ -27,7 +26,6 @@ struct TabView: View {
     
     var body: some View {
         
-        
             // stack the zoomed out background behind at all times
             ZStack (alignment: .center){
                 
@@ -35,16 +33,17 @@ struct TabView: View {
                 
                 
                 Learn3DGDViewGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "Gradient Descent Like Gravity", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
+                    .displayContainerHelper(moduleName: "3. Gradient Descent Like Gravity", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn3DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 Basic2DView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "What Is Gradient Descent?", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .basic2dView, geo: $geo)
+                    .displayContainerHelper(moduleName: "2. What Is Gradient Descent?", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .basic2dView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
                 
                 Learn2DGDView(geo:$geo,zoomedOut: self.$zoomedOut, selectedView: $selectedView)
-                    .displayContainerHelper(moduleName: "Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
+                    .displayContainerHelper(moduleName: "1. Gradient Descent Basics", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                     .gyroscope3DEffect(zoomedOut: $zoomedOut)
+                
                 
                 ZStack(alignment: .bottomTrailing) {
                     Button(action: {
@@ -58,9 +57,12 @@ struct TabView: View {
                             .frame(width: 20, height: 20)
                             .irregularGradient(colors: [Color("bg1"),Color("bg2"),Color("bg5"),Color("bg3"),Color("bg4")], backgroundColor: Color("bg4"))
                             .padding()
-                            .background(Circle().foregroundColor(.white).softInnerShadow(Circle()))
+                            .background(Circle().fill(LinearGradient(colors: [Color("neutral200"),Color("neutral400")], startPoint: .topLeading, endPoint: .bottomTrailing)))
+                        
                     })
-                }.zIndex(2).offset(x: (self.geo?.size.width ?? 500) / 2 - 70, y: (self.geo?.size.width ?? 500) / 1.33 / 2 - 70)
+                }.zIndex(2).offset(x: (geo?.size.width ?? 500) / 2 - 70, y: (geo?.size.height ?? 500) / 2 - 70)
+                
+                
             }.ignoresSafeArea(edges: .top)
             .background(
                 Rectangle()
@@ -70,6 +72,7 @@ struct TabView: View {
                     .zIndex(-1)
                     .scaleEffect(3)
             )
+            
             .background(GeometryReader { geo in
                 Text("")
                     .onAppear(perform: {
@@ -97,11 +100,10 @@ struct DisplayContainerHelper: ViewModifier{
             content
         }
                 .disabled(self.zoomedOut)
-                
                 .frame(width: self.zoomedOut ? self.viewSize().width : nil, height: self.zoomedOut ? self.viewSize().height : nil)
                 .cornerRadius(zoomedOut ? 18 : 0)
                 .padding(self.zoomedOut ? 11 : 0)
-                .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).softOuterShadow() : Rectangle().foregroundColor(.white).opacity(0).softOuterShadow() )
+                .background(zoomedOut ? Rectangle().foregroundColor(Color("deviceFrame")).opacity(1).shadow(radius: 5) : Rectangle().foregroundColor(.white).opacity(0).shadow(radius: 5))
                 .cornerRadius(zoomedOut ? 24 : 0)
 
             if self.zoomedOut {
@@ -112,15 +114,21 @@ struct DisplayContainerHelper: ViewModifier{
         }
         .zIndex(self.selectedView == self.viewType ? 1 : 0)
 
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .learn3DGDView ? .learn2DGDView : .learn3DGDView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
-        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .basic2dView ? .learn2DGDView : .basic2dView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .learn2DGDView ? .learn3DGDView : .learn2DGDView))) ? -430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0 )
+        .offset(x: (self.zoomedOut && self.selectedView != viewType && (viewType == (self.selectedView == .basic2dView ? .learn3DGDView : .basic2dView))) ? 430 : 0, y: self.zoomedOut && self.selectedView != viewType ? -65 : 0  )
         
         .onTapGesture {
             if self.zoomedOut {
-            withAnimation(.spring()) {
-                self.selectedView = self.viewType
-                self.zoomedOut.toggle()
-            }
+                DispatchQueue.main.asyncAfter(deadline: .now()){
+                    withAnimation(.spring()) {
+                        self.selectedView = self.viewType
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
+                    withAnimation(.spring()) {
+                        self.zoomedOut = false
+                    }
+                }
             }
         }
     }
