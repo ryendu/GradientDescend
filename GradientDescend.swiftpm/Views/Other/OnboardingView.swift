@@ -197,14 +197,9 @@ struct OnboardingView: View {
         .onAppear {
             withAnimation() {
                 self.animateOnScreen = true
+                self.animateGridX = true
+                self.animateGridY = true
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                withAnimation() {
-                    self.animateGridX = true
-                    self.animateGridY = true
-                }
-            })
-            
         }
     }
     func randomRainbowColor() -> Color {
