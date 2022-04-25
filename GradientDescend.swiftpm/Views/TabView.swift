@@ -43,7 +43,6 @@ struct TabView: View {
                 .displayContainerHelper(moduleName: "2. Learning Rates & Local Minima", selectedView: self.$selectedView, zoomedOut: self.$zoomedOut, viewType: .learn2DGDView, geo: $geo)
                 .gyroscope3DEffect(zoomedOut: $zoomedOut)
             
-            
             ZStack(alignment: .bottomTrailing) {
                 Button(action: {
                     withAnimation(.spring()) {

@@ -300,8 +300,8 @@ struct MoreComplex2DGDSlide: View {
                                     
                                     Group {
                                         
-                                        Slider(value: $learningRateIndx, in: 1.0...5.0, onEditingChanged: { editing in
-                                            // todo [0.001,0.005,0.01,0.10,0.1]
+                                        Slider(value: $learningRateIndx, in: 1.0...4.0, onEditingChanged: { editing in
+                                            // todo [0.001,0.005,0.01,0.10,]
                                             // default is 0.005
                                             if Int(round(learningRateIndx)) == 1 {
                                                 self.learningRate = 0.001
@@ -312,12 +312,9 @@ struct MoreComplex2DGDSlide: View {
                                             } else if Int(round(learningRateIndx)) == 3 {
                                                 self.learningRate = 0.01
                                                 self.learningRateIndx = 3
-                                            } else if Int(round(learningRateIndx)) == 4 {
+                                            } else {
                                                 self.learningRate = 0.1
                                                 self.learningRateIndx = 4
-                                            } else {
-                                                self.learningRate = 1
-                                                self.learningRateIndx = 5
                                             }
                                         }).padding()
                                         

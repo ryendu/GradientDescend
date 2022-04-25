@@ -288,7 +288,7 @@ struct ComplexInteractiveGraph2DView: View {
         // p0 and p2 are end points of line
         // p1 is the control point
         // adapted from https://stackoverflow.com/a/16756481/13770657
-        // equation for getting y point of an x point on a beizer cubic curve
+        // equation for getting y point of an x point on a bezier cubic curve
         let control1 = CGPoint(x: help.geo.size.width / 4, y: help.geo.size.height * 1.25)
         let control2 = CGPoint(x: help.geo.size.width - help.geo.size.width / 4, y: help.geo.size.height * 1.25)
         let start = CGPoint(x: 0, y: 0)
