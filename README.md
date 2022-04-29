@@ -1,4 +1,4 @@
-# GradientDescend
+# GradientDescend 
 
 Welcome to GradientDescend! This is my submission for the WWDC 2022 Swift Student Challenge.
 If you'd like, you can check out GradientDescend's [**Trailer Video**](https://www.youtube.com/watch?v=TINWpa961VE)
@@ -16,12 +16,14 @@ IrregularGradients is a package built by **João Gabriel** and provides beautifu
 ### [**ConfettiSwiftUI**](https://github.com/simibac/ConfettiSwiftUI)
 ConfettiSwiftui is a package built by **Simon Bachmann** that contains a variety of customizable SwiftUI confetti. The confetti displayed in GradientDescend is from the ConfettiSwiftUI package and adds a fun element to GradientDescend. 
 
-## Thanks
+## Thanks 🙃
 I'd like to thank some of my **friends** for their inspiration and support during my dubdub journey. 
 
 Thank you [aheze](https://github.com/aheze) and his [Club Day App](https://github.com/AHSCodingClub/ClubDay2022) for inspiration on the bubbles!
 
-Thank you Christina, Allyson, and Claire's for your support in my WWDC SSC grind and being there for me as awesome friends!
+Thank you Madhav for going through DubDub with me and keeping me sane during ssc weekend.
+
+Thank you Cristina, Allysun, Clear, and Moneeca for supporting my DubDub grind and being there for me as awesome friends!
 
 ## Images
 
