@@ -14,6 +14,8 @@ IrregularGradients is a package built by **João Gabriel** and provides beautifu
 ### [**ConfettiSwiftUI**](https://github.com/simibac/ConfettiSwiftUI)
 ConfettiSwiftui is a package built by **Simon Bachmann** that contains a variety of customizable SwiftUI confetti. The confetti displayed in GradientDescend is from the ConfettiSwiftUI package and adds a fun element to GradientDescend. 
 
+## Attribution
+Special thanks to [aheze](https://github.com/aheze) and his [Club Day App](https://github.com/AHSCodingClub/ClubDay2022) for inspiration on the bubbles!
 
 ## Images
 ![Screen Shot 2022-04-28 at 9 53 24 PM](https://user-images.githubusercontent.com/61951438/165878538-a95b2355-c63c-4b83-b0b9-7fbd98a1bfb9.png)
