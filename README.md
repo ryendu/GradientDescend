@@ -23,7 +23,7 @@ Thank you [aheze](https://github.com/aheze) and his [Club Day App](https://githu
 
 Thank you Madhav for going through DubDub with me and keeping me sane during ssc weekend.
 
-Thank you Cristina, Allysun, Clear, and Moneeca for supporting my DubDub grind and being there for me as awesome friends!
+Thank you Christina, Allyson, Claire, and Monica for supporting my DubDub grind and being there for me as awesome friends!
 
 ## Images
 
